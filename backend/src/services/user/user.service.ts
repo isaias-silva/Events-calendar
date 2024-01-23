@@ -5,6 +5,9 @@ import { Responses } from 'src/enums/Responses';
 import { User } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
+import { writeFileSync } from 'fs';
+import { resolve } from 'path';
+
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private readonly userModel: Model<User>,
@@ -13,10 +16,10 @@ export class UserService {
 
     async exists(filter): Promise<boolean> {
         try {
-            if (!filter){
+            if (!filter) {
                 return false
             }
-                const user = await this.userModel.findOne(filter)
+            const user = await this.userModel.findOne(filter)
 
             return user ? true : false
         } catch (err) {
@@ -79,7 +82,7 @@ export class UserService {
 
     async get(_id: string) {
         try {
-        
+
             const user = await this.userModel.findOne({ _id })
             if (!user) {
                 throw new NotFoundException(Responses.USER_NOT_FOUND)
@@ -110,13 +113,13 @@ export class UserService {
             throw err
         }
     }
-    async update(_id: string, name?: string, mail?: string, profile?: string) {
+    async update(_id: string, domain: string, name?: string, mail?: string, profile?: Buffer) {
         try {
             const exists = await this.exists({ _id })
             if (!exists) {
                 throw new NotFoundException(Responses.USER_NOT_FOUND)
             }
-            const updatedInfo: { name?: string, mail?: string, profile?: string } = {}
+            const updatedInfo: { name?: string, mail?: string } = {}
 
             if (name) {
                 updatedInfo.name = name
@@ -124,15 +127,27 @@ export class UserService {
             if (mail) {
                 updatedInfo.mail = mail
             }
-            if (profile) {
-                updatedInfo.profile = profile
-            }
+
             await this.userModel.updateOne({ _id }, updatedInfo)
             return { message: Responses.USER_UPDATED }
 
         } catch (err) {
             Logger.error(err, 'User Service')
             throw err
+        }
+    }
+    async updateProfile(_id: string, domain: string, file: Buffer) {
+        const exists = await this.exists({ _id })
+        if (!exists) {
+            throw new NotFoundException(Responses.USER_NOT_FOUND)
+        }
+        if (file) {
+            const pathFile = resolve("public", "temp", _id + ".png")
+
+            writeFileSync(pathFile, file)
+            const profile = domain + `/static/temp/${_id}.png`
+
+            await this.userModel.updateOne({ _id }, { profile })
         }
     }
 
