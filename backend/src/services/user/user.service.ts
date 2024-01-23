@@ -137,21 +137,25 @@ export class UserService {
         }
     }
     async updateProfile(_id: string, domain: string, file: Buffer) {
-        const exists = await this.exists({ _id })
-        if (!exists) {
-            throw new NotFoundException(Responses.USER_NOT_FOUND)
+        try {
+            const exists = await this.exists({ _id })
+            if (!exists) {
+                throw new NotFoundException(Responses.USER_NOT_FOUND)
+            }
+            if (file) {
+                const pathFile = resolve("public", "temp", _id + ".png")
+
+                writeFileSync(pathFile, file)
+                const profile = domain + `/static/temp/${_id}.png`
+
+                await this.userModel.updateOne({ _id }, { profile })
+            }
         }
-        if (file) {
-            const pathFile = resolve("public", "temp", _id + ".png")
-
-            writeFileSync(pathFile, file)
-            const profile = domain + `/static/temp/${_id}.png`
-
-            await this.userModel.updateOne({ _id }, { profile })
+        catch (err) {
+            Logger.error(err, 'User Service')
+            throw err
         }
     }
-
-
     async delete(_id: string) {
         try {
             const exists = await this.exists({ _id })
@@ -167,3 +171,4 @@ export class UserService {
         }
     }
 }
+

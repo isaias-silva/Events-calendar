@@ -1,5 +1,6 @@
 import {
     Body, Controller,
+    Delete,
     FileTypeValidator
     , Get,
     MaxFileSizeValidator,
@@ -47,6 +48,7 @@ export class UserController {
 
     }
 
+
     @Put('update/profile')
     @UseGuards(JwtGuard)
     @UseInterceptors(FileInterceptor('file'))
@@ -63,5 +65,11 @@ export class UserController {
         const domain = `${protocol}://${host}`;
         return await this.userService.updateProfile(req["user"]._id, domain, file.buffer)
 
+    }
+
+    @Delete('delete')
+    @UseGuards(JwtGuard)
+    async deleteUser(@Req() req: Request) {
+        return await this.userService.delete(req["user"]._id)
     }
 }
