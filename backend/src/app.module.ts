@@ -13,7 +13,7 @@ import { join } from 'path';
     dest: '/upload',
   }),
   ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'public'),
+    rootPath: join(__dirname, '..', 'public','temp'),
     serveRoot: '/static',
   }),
     UserModule,

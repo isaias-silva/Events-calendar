@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { config } from 'dotenv';
 import { UserController } from 'src/controllers/user/user.controller';
 import { User, userSchema } from 'src/schemas/user.schema';
+import { MailService } from 'src/services/mail/mail.service';
 import { UserService } from 'src/services/user/user.service';
 config()
 @Module({
@@ -15,7 +16,7 @@ config()
       }),
 ],
     controllers: [UserController],
-    providers: [UserService],
+    providers: [UserService,MailService],
     exports: [UserService]
 })
 export class UserModule { }

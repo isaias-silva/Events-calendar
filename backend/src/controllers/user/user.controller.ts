@@ -10,17 +10,22 @@ import {
 
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserLoginDto } from 'src/dtos/user.login.dto';
 import { UserSubscribeDto } from 'src/dtos/user.subscribe.dto';
+import { UserUpdateDto } from 'src/dtos/user.update.dto';
 import { JwtGuard } from 'src/guards/jwt.guard.ts/jwt.guard.ts.guard';
 import { UserService } from 'src/services/user/user.service';
 
 @Controller('user')
+@ApiTags('User routes')
+
 export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Post('subscribe')
+  
     async subscribeUser(@Body() body: UserSubscribeDto) {
 
         return await this.userService.subscribe(body.name, body.mail, body.password)
@@ -32,33 +37,35 @@ export class UserController {
         return await this.userService.login(body.mail, body.password)
     }
 
+    @ApiBearerAuth()
     @Get('me')
     @UseGuards(JwtGuard)
     async getMe(@Req() req: Request) {
         return await this.userService.get(req["user"]._id);
 
     }
+
+    @ApiBearerAuth()
     @Put('update')
     @UseGuards(JwtGuard)
-
-    async updateInfo(@Req() req: Request, @Body() body) {
+    async updateInfo(@Req() req: Request, @Body() body:UserUpdateDto) {
 
 
         return await this.userService.update(req["user"]._id, body.name, body.mail)
 
     }
 
-
+    @ApiBearerAuth()
     @Put('update/profile')
     @UseGuards(JwtGuard)
     @UseInterceptors(FileInterceptor('file'))
-
     async updateProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
             new MaxFileSizeValidator({ maxSize: 100000 }),
             new FileTypeValidator({ fileType: 'image' }),
 
         ],
+        
     })) file?: Express.Multer.File) {
         const protocol = req.protocol;
         const host = req.get('host');
@@ -67,6 +74,7 @@ export class UserController {
 
     }
 
+    @ApiBearerAuth()
     @Delete('delete')
     @UseGuards(JwtGuard)
     async deleteUser(@Req() req: Request) {

@@ -18,6 +18,9 @@ export class User {
     mailVerify: boolean;
 
     @Prop()
+    code:string
+
+    @Prop()
     profile: string
 
 }

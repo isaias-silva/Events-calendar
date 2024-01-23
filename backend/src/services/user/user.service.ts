@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Responses } from 'src/enums/Responses';
@@ -7,11 +7,13 @@ import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel(User.name) private readonly userModel: Model<User>,
-        private jwtService: JwtService
+        @Inject(JwtService) private readonly jwtService: JwtService,
+        @Inject(MailService) private readonly mailService: MailService
     ) { }
 
     async exists(filter): Promise<boolean> {
@@ -58,7 +60,7 @@ export class UserService {
     }
 
 
-    async subscribe(name: string, mail: string, pass: string) {
+    async subscribe(name: string, mail: string, pass: string, url?: string) {
         try {
             const exists = await this.exists({ $or: [{ name }, { mail }] })
             if (exists) {
@@ -67,9 +69,18 @@ export class UserService {
 
             const password = bcrypt.hashSync(pass, 10)
 
-            const user = await this.userModel.create({ name, mail, password })
-
+            const code = Math.random().toString(36).replace('.0', 'Z-')
+            const user = await this.userModel.create({ name, mail, password, code })
             const token = await this.jwtService.signAsync({ payload: { name, mail, _id: user._id } })
+
+
+            const body = this.mailService.makeMessage(`seja bem vindo`,
+                user.name,
+                `seja bem vindo a events callendar! para validar o e-mail da sua conta clique no link abaixo: `,
+                `${process.env.FRONT}/verify`, 'validar e-mail')
+
+            this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
+
 
             return { message: Responses.USER_SUBSCRIBED, token }
 
@@ -146,7 +157,7 @@ export class UserService {
                 const pathFile = resolve("public", "temp", _id + ".png")
 
                 writeFileSync(pathFile, file)
-                const profile = domain + `/static/temp/${_id}.png`
+                const profile = domain + `/static/${_id}.png`
 
                 await this.userModel.updateOne({ _id }, { profile })
             }
