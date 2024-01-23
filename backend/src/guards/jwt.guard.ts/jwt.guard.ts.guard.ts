@@ -5,7 +5,7 @@ import { Responses } from 'src/enums/Responses';
 
 
 @Injectable()
-export class JwtGuardTsGuard implements CanActivate {
+export class JwtGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -15,11 +15,12 @@ export class JwtGuardTsGuard implements CanActivate {
       throw new UnauthorizedException(Responses.ACCESS_DENIED);
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token);
-    
-      request['user'] = payload;
+      const decrypted = await this.jwtService.verifyAsync(token);
+       
+      request['user'] = decrypted.payload;
+   
     } catch(err) {
-      throw new UnauthorizedException(err);
+      throw new UnauthorizedException(err.message);
     }
     return true;
   }

@@ -13,7 +13,10 @@ export class UserService {
 
     async exists(filter): Promise<boolean> {
         try {
-            const user = await this.userModel.find(filter)
+            if (!filter){
+                return false
+            }
+                const user = await this.userModel.findOne(filter)
 
             return user ? true : false
         } catch (err) {
@@ -44,7 +47,7 @@ export class UserService {
                 message: Responses.USER_LOGIN
             }
 
-            
+
         } catch (err) {
             Logger.error(err, 'User Service')
             throw err
@@ -76,6 +79,7 @@ export class UserService {
 
     async get(_id: string) {
         try {
+        
             const user = await this.userModel.findOne({ _id })
             if (!user) {
                 throw new NotFoundException(Responses.USER_NOT_FOUND)
