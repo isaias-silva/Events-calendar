@@ -1,0 +1,8 @@
+export enum Responses {
+
+    USER_ALREADY_EXISTS = 'user exists',
+    USER_SUBSCRIBED = "USER_SUBSCRIBED",
+    USER_NOT_FOUND = "USER_NOT_FOUND",
+    USER_UPDATED = "USER_UPDATED",
+    USER_DELETED = "USER_DELETED"
+}
