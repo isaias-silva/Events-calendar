@@ -23,4 +23,9 @@ export class EventUpdateDto {
     @ApiProperty()
 
     endString: string
+
+
+    @ApiProperty()
+    @IsOptional()
+    isPrivate: boolean
 }

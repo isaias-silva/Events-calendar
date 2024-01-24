@@ -43,7 +43,7 @@ export class EventService {
     }
     async create(owner: string, event: EventCreateDto) {
         try {
-            const { title, initString, endString, describ } = event
+            const { title, initString, endString, describ, isPrivate } = event
 
             const eventSameCount = await this.getCount({ title, owner })
 
@@ -52,7 +52,7 @@ export class EventService {
             const init = new Date(initString)
             const end = new Date(endString)
 
-            await this.eventModel.create({ owner, title: formatTitle, describ, init, end })
+            await this.eventModel.create({ owner, title: formatTitle, describ, init, end, isPrivate })
 
             return {
                 message: eventSameCount ? Responses.EVENT_CREATED_BUT_EVENT_NAME_EXISTS : Responses.EVENT_CREATED
@@ -66,15 +66,15 @@ export class EventService {
         try {
             if (_id) {
                 const eventDb = await this.eventModel.findOne({ owner, _id })
-                const { title, describ, init, end, background } = eventDb
-                const event = { title, describ, init, end, background, _id }
+                const { title, describ, init, end, background, participants, isPrivate } = eventDb
+                const event = { title, describ, init, end, background, _id, owner, isPrivate }
                 return event
 
             } else {
                 const eventsDb = await this.eventModel.find(isGlobal ? null : { owner })
                 return eventsDb.map(eventDb => {
-                    const { title, describ, init, end, background } = eventDb
-                    const event = { title, describ, init, end, background, _id }
+                    const { title, describ, init, end, background, participants, isPrivate } = eventDb
+                    const event = { title, describ, init, end, background, _id, participants, isPrivate }
                     return event
                 })
             }
@@ -149,6 +149,15 @@ export class EventService {
         } catch (err) {
             Logger.error(err, 'User Service')
             throw err
+        }
+    }
+
+    async subscribe(user:string,_id:string){
+        try {
+        
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+
         }
     }
 

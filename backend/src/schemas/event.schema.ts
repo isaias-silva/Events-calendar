@@ -12,6 +12,9 @@ export class Event {
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     participants: User[]
 
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    applicants: User[]
+
     @Prop({ required: true })
     title: string;
 
@@ -28,6 +31,9 @@ export class Event {
 
     @Prop({ required: true })
     end: Date
+
+    @Prop({ default: false, require: true })
+    isPrivate: boolean
 
 }
 
