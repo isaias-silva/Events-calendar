@@ -7,7 +7,7 @@ const creds = require('../../../auth.client.json')
 @Injectable()
 export class MailService {
 
-    makeMessage(title: string, name: string, message: string, link: string, text_link: string) {
+    makeMessage(title: string, name: string, message: string, link: string, text_link: string, image_url: string) {
 
         const mailHtml = readFileSync(resolve('public', 'assets', 'mail.html'))
         const formatMail = mailHtml.toString()
@@ -16,10 +16,11 @@ export class MailService {
             .replace(/\[MESSAGE\]/g, message)
             .replace(/\[LINK\]/g, link)
             .replace(/\[TEXT-LINK\]/g, text_link)
+            .replace(/\[IMAGE]/g, image_url)
 
         return formatMail
     }
-    
+
     createMessage(to: string, subject: string, body: string) {
         const utf8Subject = `=?utf-8?B?${Buffer.from(subject).toString('base64')}?=`;
         const messageParts = [

@@ -17,6 +17,6 @@ config()
 ],
     controllers: [UserController],
     providers: [UserService,MailService],
-    exports: [UserService]
+    exports: [UserService,MongooseModule,JwtModule,MailService]
 })
 export class UserModule { }

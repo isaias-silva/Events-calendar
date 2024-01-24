@@ -1,8 +1,8 @@
-import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Responses } from 'src/enums/Responses';
-import { User } from 'src/schemas/user.schema';
+import { User, UserDocument } from 'src/schemas/user.schema';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { writeFileSync } from 'fs';
@@ -70,14 +70,22 @@ export class UserService {
             const password = bcrypt.hashSync(pass, 10)
 
             const code = Math.random().toString(36).replace('.0', 'Z-')
+
             const user = await this.userModel.create({ name, mail, password, code })
+
             const token = await this.jwtService.signAsync({ payload: { name, mail, _id: user._id } })
 
 
-            const body = this.mailService.makeMessage(`seja bem vindo`,
+            const link = await this.generateLinkForValidate(code)
+
+            const body = this.mailService.makeMessage(
+                `seja bem vindo`,
                 user.name,
                 `seja bem vindo a events callendar! para validar o e-mail da sua conta clique no link abaixo: `,
-                `${process.env.FRONT}/verify`, 'validar e-mail')
+                link,
+                'validar e-mail',
+                "https://picsmemes.com/wp-content/uploads/2022/10/welcome-to-the-club-meme.jpg")
+
 
             this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
 
@@ -180,6 +188,44 @@ export class UserService {
             Logger.error(err, 'User Service')
             throw err
         }
+    }
+    async validateMail(_id: string, token: string) {
+        try {
+            const exists = await this.userModel.findOne({ _id })
+            if (!exists) {
+                throw new NotFoundException(Responses.USER_NOT_FOUND)
+            }
+            if (exists.mailVerify) {
+                throw new BadRequestException(Responses.USER_ALREADY_VALIDATED)
+            }
+            const decoded: { code: string } = await this.jwtService.decode(token)
+
+            if (decoded.code == exists.code) {
+                await this.userModel.updateOne({ _id }, { mailVerify: true })
+                const body = this.mailService.makeMessage(
+                    `Seu e-mail foi validado!`,
+                    exists.name,
+                    `seu e-mail foi validado com sucesso! você já pode programar seus eventos com maestria na nossa plataforma!`,
+                    process.env.FRONT,
+                    'acesse seu dashboard!',
+                   "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
+
+
+                this.mailService.sendMail(exists.mail, "e-mail validado!", body)
+
+                return { message: Responses.USER_MAIL_VALIDATE }
+            } else {
+                throw new UnauthorizedException(Responses.INVALID_CODE_MAIL)
+            }
+        } catch (err) {
+            Logger.error(err, 'User Service')
+            throw err
+        }
+    }
+
+    private async generateLinkForValidate(code: string) {
+        const token = await this.jwtService.signAsync({ code })
+        return `${process.env.FRONT}/verify?token=${token}`
     }
 }
 

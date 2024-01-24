@@ -5,7 +5,7 @@ import {
     , Get,
     MaxFileSizeValidator,
     ParseFilePipe, Post,
-    Put, Req, UploadedFile,
+    Put, Query, Req, UploadedFile,
     UseGuards, UseInterceptors,
 
 } from '@nestjs/common';
@@ -15,7 +15,8 @@ import { Request } from 'express';
 import { UserLoginDto } from 'src/dtos/user.login.dto';
 import { UserSubscribeDto } from 'src/dtos/user.subscribe.dto';
 import { UserUpdateDto } from 'src/dtos/user.update.dto';
-import { JwtGuard } from 'src/guards/jwt.guard.ts/jwt.guard.ts.guard';
+import { JwtGuard } from 'src/guards/jwt/jwt.guard';
+import { MailGuard } from 'src/guards/mail/mail.guard';
 import { UserService } from 'src/services/user/user.service';
 
 @Controller('user')
@@ -25,7 +26,7 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Post('subscribe')
-  
+
     async subscribeUser(@Body() body: UserSubscribeDto) {
 
         return await this.userService.subscribe(body.name, body.mail, body.password)
@@ -40,6 +41,7 @@ export class UserController {
     @ApiBearerAuth()
     @Get('me')
     @UseGuards(JwtGuard)
+    
     async getMe(@Req() req: Request) {
         return await this.userService.get(req["user"]._id);
 
@@ -48,7 +50,7 @@ export class UserController {
     @ApiBearerAuth()
     @Put('update')
     @UseGuards(JwtGuard)
-    async updateInfo(@Req() req: Request, @Body() body:UserUpdateDto) {
+    async updateInfo(@Req() req: Request, @Body() body: UserUpdateDto) {
 
 
         return await this.userService.update(req["user"]._id, body.name, body.mail)
@@ -65,7 +67,7 @@ export class UserController {
             new FileTypeValidator({ fileType: 'image' }),
 
         ],
-        
+
     })) file?: Express.Multer.File) {
         const protocol = req.protocol;
         const host = req.get('host');
@@ -79,5 +81,13 @@ export class UserController {
     @UseGuards(JwtGuard)
     async deleteUser(@Req() req: Request) {
         return await this.userService.delete(req["user"]._id)
+    }
+
+    @ApiBearerAuth()
+    @Get('validate')
+    @UseGuards(JwtGuard)
+    async validateMail(@Req() req: Request, @Query('token') token: string) {
+        return await this.userService.validateMail(req["user"]._id, token)
+
     }
 }
