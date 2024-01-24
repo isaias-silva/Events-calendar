@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { EventCreateDto } from 'src/dtos/event.create.dto';
+import { EventSubscribeDto } from 'src/dtos/event.subscribe.dto';
 import { EventUpdateDto } from 'src/dtos/event.update.dto';
 import { JwtGuard } from 'src/guards/jwt/jwt.guard';
 import { MailGuard } from 'src/guards/mail/mail.guard';
@@ -18,6 +19,11 @@ export class EventController {
     @Post('create')
     async createEvent(@Req() req: Request, @Body() event: EventCreateDto) {
         return await this.eventService.create(req["user"]._id, event)
+    }
+
+    @Post('subscribe')
+    async subscribeEvent(@Req() req: Request, @Body() event: EventSubscribeDto) {
+        return await this.eventService.subscribe(req["user"]._id, event._id)
     }
 
     @Get('get/me')
@@ -61,5 +67,6 @@ export class EventController {
 
         return await this.eventService.delete(req["user"]._id, id)
     }
+
 
 }

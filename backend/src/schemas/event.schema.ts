@@ -1,19 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { User } from './user.schema';
 
 export type EventDocument = HydratedDocument<Event>;
 
 @Schema()
 export class Event {
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    owner: User;
+    owner: string;
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    participants: User[]
+    participants: string[]
 
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
-    applicants: User[]
+    applicants: string[]
 
     @Prop({ required: true })
     title: string;
@@ -26,11 +25,11 @@ export class Event {
 
 
     @Prop({ required: true })
-    init: Date
+    initDate: Date
 
 
     @Prop({ required: true })
-    end: Date
+    endDate: Date
 
     @Prop({ default: false, require: true })
     isPrivate: boolean

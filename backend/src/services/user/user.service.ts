@@ -16,7 +16,7 @@ export class UserService {
         @Inject(MailService) private readonly mailService: MailService
     ) { }
 
-   private async exists(filter): Promise<boolean> {
+    private async exists(filter): Promise<boolean> {
         try {
             if (!filter) {
                 return false
@@ -107,7 +107,8 @@ export class UserService {
                 throw new NotFoundException(Responses.USER_NOT_FOUND)
             }
             const { name, profile, mail, mailVerify } = user
-            return { name, profile, mail, mailVerify }
+
+            return  { name, profile, mail, mailVerify }
         }
         catch (err) {
             Logger.error(err, 'User Service')
@@ -208,7 +209,7 @@ export class UserService {
                     `seu e-mail foi validado com sucesso! você já pode programar seus eventos com maestria na nossa plataforma!`,
                     process.env.FRONT,
                     'acesse seu dashboard!',
-                   "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
+                    "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
 
 
                 this.mailService.sendMail(exists.mail, "e-mail validado!", body)
