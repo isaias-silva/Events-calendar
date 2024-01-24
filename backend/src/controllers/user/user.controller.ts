@@ -48,6 +48,14 @@ export class UserController {
     }
 
     @ApiBearerAuth()
+    @Get('validate')
+    @UseGuards(JwtGuard)
+    async validateMail(@Req() req: Request, @Query('token') token: string) {
+        return await this.userService.validateMail(req["user"]._id, token)
+
+    }
+
+    @ApiBearerAuth()
     @Put('update')
     @UseGuards(JwtGuard)
     async updateInfo(@Req() req: Request, @Body() body: UserUpdateDto) {
@@ -83,11 +91,5 @@ export class UserController {
         return await this.userService.delete(req["user"]._id)
     }
 
-    @ApiBearerAuth()
-    @Get('validate')
-    @UseGuards(JwtGuard)
-    async validateMail(@Req() req: Request, @Query('token') token: string) {
-        return await this.userService.validateMail(req["user"]._id, token)
 
-    }
 }

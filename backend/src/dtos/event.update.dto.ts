@@ -1,25 +1,26 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEmail, IsNotEmpty, isNotEmpty } from "class-validator";
+import { IsDateString, IsOptional } from "class-validator";
 
-export class EventCreateDto {
-    @IsNotEmpty()
+export class EventUpdateDto {
+    @IsOptional()
     @ApiProperty()
     title: string
-   
-    @IsNotEmpty()
+
+
+    @IsOptional()
     @ApiProperty()
-    
     describ: string
-   
-    @IsNotEmpty()
+
+
+    @IsOptional()
     @IsDateString()
     @ApiProperty()
-    
+
     initString: string
 
-    @IsNotEmpty()    
+    @IsOptional()
     @IsDateString()
     @ApiProperty()
-    
+
     endString: string
 }

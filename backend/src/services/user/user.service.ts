@@ -16,7 +16,7 @@ export class UserService {
         @Inject(MailService) private readonly mailService: MailService
     ) { }
 
-    async exists(filter): Promise<boolean> {
+   private async exists(filter): Promise<boolean> {
         try {
             if (!filter) {
                 return false
