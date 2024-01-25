@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './modules/user/user.module';
 import { EventModule } from './modules/event/event.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ExtractDomainMiddleware } from './middlewares/extractDomain.middleware';
 
 
 @Module({
@@ -22,4 +23,9 @@ import { join } from 'path';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule implements NestModule { 
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ExtractDomainMiddleware).forRoutes('*')
+}
+}

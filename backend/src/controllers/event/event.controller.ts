@@ -17,7 +17,7 @@ import { EventService } from 'src/services/event/event.service';
 
 export class EventController {
     constructor(@Inject(EventService) private readonly eventService: EventService) { }
-    
+
     @Post('create')
     async createEvent(@Req() req: Request, @Body() event: EventCreateDto) {
         return await this.eventService.create(req["user"]._id, event)
@@ -28,6 +28,10 @@ export class EventController {
         return await this.eventService.subscribe(req["user"]._id, event._id)
     }
 
+    @Post('unsubscribe')
+    async unsubcribeEvent(@Req() req: Request, @Body() event: EventSubscribeDto) {
+        return await this.eventService.unsubscribe(req["user"]._id, event._id)
+    }
     @Post('/approve')
     async approveInEvent(@Req() req: Request, @Body() data: EventApproveDto) {
         return await this.eventService.approve(req["user"]._id, data.user, data._id)
@@ -47,17 +51,25 @@ export class EventController {
     async getEvent(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.get(req["user"]._id, false, id)
     }
-   
+
     @Get('get/applicants/:id')
     async getApplicants(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.getApplicants(req["user"]._id, id)
     }
-   
+
     @Get('get/participants/:id')
     async getParticipants(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.getParticipants(req["user"]._id, id)
     }
-   
+
+    @Get('/where/participate')
+    async getEventsWhereParticipant(@Req() req: Request) {
+        return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "participant")
+    }
+    @Get('get/where/applicate')
+    async getEventsWhereApplicant(@Req() req: Request) {
+        return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "applicant")
+    }
     @Put('update/:id')
     async updateEvent(@Req() req: Request, @Param('id') id: string, @Body() event: EventUpdateDto) {
         return await this.eventService.update(req["user"]._id, id, event)
@@ -72,11 +84,10 @@ export class EventController {
 
         ],
     })) file: Express.Multer.File) {
-        const protocol = req.protocol;
-        const host = req.get('host');
-        const domain = `${protocol}://${host}`;
 
-        return await this.eventService.updateBackground(req["user"]._id, domain, id, file.buffer)
+
+
+        return await this.eventService.updateBackground(req["user"]._id, req["domain"], id, file.buffer)
 
     }
 

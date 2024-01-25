@@ -77,10 +77,8 @@ export class UserController {
         ],
 
     })) file?: Express.Multer.File) {
-        const protocol = req.protocol;
-        const host = req.get('host');
-        const domain = `${protocol}://${host}`;
-        return await this.userService.updateProfile(req["user"]._id, domain, file.buffer)
+    
+        return await this.userService.updateProfile(req["user"]._id, req["domain"], file.buffer)
 
     }
 

@@ -57,6 +57,13 @@ export class EventService {
 
             const initDate = new Date(initString)
             const endDate = new Date(endString)
+            const nowDate = new Date()
+
+            if ((nowDate > initDate) || (initDate > endDate)) {
+                throw new BadRequestException(Responses.INVALID_TEMP_INTERVAL)
+            }
+
+
 
             await this.eventModel.create({ owner, title: formatTitle, describ, initDate, endDate, isPrivate })
 
@@ -71,12 +78,12 @@ export class EventService {
     async get(owner: string, isGlobal?: boolean, _id?: string) {
         try {
             if (_id) {
-                const eventDb = await this.eventModel.findOne({ owner, _id })
+                const eventDb = await this.eventModel.findOne({ _id })
                 if (!eventDb) {
                     throw new NotFoundException(Responses.EVENT_NOT_FOUND)
                 }
-                const { title, describ, initDate, endDate, background, isPrivate, participants, applicants } = eventDb
-                const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate, participants, applicants }
+                const { title, describ, initDate, endDate, background, isPrivate } = eventDb
+                const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate }
                 return event
 
             } else {
@@ -237,7 +244,7 @@ export class EventService {
             await eventDb.save()
 
             const bodyUser = this.mailService.generateMessage('invite user', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
-            const bodyOwner = this.mailService.generateMessage('invite owner', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+            const bodyOwner = this.mailService.generateMessage('invite owner', ownerDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
 
 
             Promise.all([this.mailService.sendMail(ownerDb.mail, "inscrição nova", bodyOwner),
@@ -253,7 +260,49 @@ export class EventService {
             throw err
         }
     }
+    async unsubscribe(user: string, _id: string) {
+        try {
+            const eventDb = await this.eventModel.findOne({ _id })
 
+            if (!eventDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+
+            if (eventDb.owner == user) {
+                throw new BadRequestException(Responses.YOU_ARE_OWNER_OF_EVENT)
+            }
+
+            const inParticipants = eventDb.participants.find(value => value == user)
+            const inApplicants = eventDb.applicants.find(value => value == user)
+
+            if (!inParticipants && !inApplicants) {
+                throw new BadRequestException(Responses.USER_NOT_FOUND_IN_EVENT)
+            }
+
+            if (eventDb.isPrivate && inApplicants) {
+                const index = eventDb.applicants.indexOf(user)
+                eventDb.applicants.splice(index, 1)
+            }
+            else if (inParticipants) {
+                const index = eventDb.participants.indexOf(user)
+                eventDb.participants.splice(index, 1)
+
+            }
+
+
+            await eventDb.save()
+
+
+            return { message: Responses.YOU_UNSUBSCRIBE_IN_EVENT }
+
+
+
+
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+            throw err
+        }
+    }
     async approve(owner: string, user: string, _id: string) {
         try {
             const eventDb = await this.eventModel.findOne({ owner, _id })
@@ -308,6 +357,9 @@ export class EventService {
             const $or = applicants.map((applicant) => {
                 return { _id: applicant.toString() }
             })
+            if ($or.length < 1) {
+                return []
+            }
 
             const users = await this.userService.getUsersByFilter({ $or })
             return users
@@ -330,8 +382,25 @@ export class EventService {
                 return { _id: participant }
             })
 
+            if ($or.length < 1) {
+                return []
+            }
             const users = await this.userService.getUsersByFilter({ $or })
             return users
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+            throw err
+        }
+    }
+    async getSubscribeOrApplicantsEvents(user: string, type: 'participant' | 'applicant') {
+        try {
+
+            const eventsDb = await this.eventModel.find(type == 'participant' ? { participants: { $in: [user] } } : { participants: { $in: [user] } })
+            if (!eventsDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+            return eventsDb
+
         } catch (err) {
             Logger.error(err, 'Event Service')
             throw err

@@ -28,7 +28,7 @@ export class MailService {
                 body = this.makeMessage(
                     `Seu e-mail foi validado!`,
                     userName,
-                    `seu e-mail foi validado com sucesso! você já pode programar seus eventos com maestria na nossa plataforma!`,
+                    `seu e-mail foi validado com sucesso! você já pode programar seus eventos e se inscrever em eventos com maestria na nossa plataforma!`,
                     process.env.FRONT,
                     'acesse seu dashboard!',
                     "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
@@ -75,7 +75,7 @@ export class MailService {
                 break
             default:
                 return null
-                break
+                
         }
 
 return body

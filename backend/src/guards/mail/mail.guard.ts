@@ -10,7 +10,6 @@ export class MailGuard implements CanActivate {
     context: ExecutionContext,
   ) {
 
-    Logger.verbose('verify email', 'Mail Guard')
     const request = context.switchToHttp().getRequest();
     const user = await this.userService.get(request["user"]._id)
     if (!user.mailVerify) {
