@@ -6,6 +6,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ExtractDomainMiddleware } from './middlewares/extractDomain.middleware';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
@@ -14,18 +15,20 @@ import { ExtractDomainMiddleware } from './middlewares/extractDomain.middleware'
     dest: '/upload',
   }),
   ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '..', 'public','temp'),
+    rootPath: join(__dirname, '..', 'public', 'temp'),
     serveRoot: '/static',
+
   }),
+  ScheduleModule.forRoot(),
     UserModule,
     EventModule
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule implements NestModule { 
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ExtractDomainMiddleware).forRoutes('*')
-}
+  }
 }
