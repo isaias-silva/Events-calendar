@@ -34,6 +34,11 @@ export class Event {
     @Prop({ default: false, require: true })
     isPrivate: boolean
 
+    @Prop({ default: true, require: true })
+    isActive: boolean
+
+
+
 }
 
 export const eventSchema = SchemaFactory.createForClass(Event);

@@ -82,15 +82,15 @@ export class EventService {
                 if (!eventDb) {
                     throw new NotFoundException(Responses.EVENT_NOT_FOUND)
                 }
-                const { title, describ, initDate, endDate, background, isPrivate } = eventDb
-                const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate }
+                const { title, describ, initDate, endDate, background, isPrivate,isActive } = eventDb
+                const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate,isActive }
                 return event
 
             } else {
-                const eventsDb = await this.eventModel.find(isGlobal ? null : { owner })
+                const eventsDb = await this.eventModel.find(isGlobal ? null: { owner })
                 return eventsDb.map(eventDb => {
-                    const { title, describ, initDate, endDate, background, participants, isPrivate, _id, owner } = eventDb
-                    const event = { title, describ, initDate, endDate, background, _id, participants, isPrivate, owner }
+                    const { title, describ, initDate, endDate, background, participants, isPrivate, _id, owner,isActive } = eventDb
+                    const event = { title, describ, initDate, endDate, background, _id, participants, isPrivate, owner,isActive }
                     return event
                 })
             }
