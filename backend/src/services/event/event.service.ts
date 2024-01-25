@@ -205,7 +205,7 @@ export class EventService {
 
     async subscribe(user: string, _id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id })
+            const eventDb = await this.eventModel.findOne({ _id , isActive:true})
 
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
