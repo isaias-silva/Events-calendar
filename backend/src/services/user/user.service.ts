@@ -108,7 +108,7 @@ export class UserService {
             }
             const { name, profile, mail, mailVerify } = user
 
-            return  { name, profile, mail, mailVerify }
+            return { name, profile, mail, mailVerify }
         }
         catch (err) {
             Logger.error(err, 'User Service')
@@ -129,6 +129,22 @@ export class UserService {
 
         }
         catch (err) {
+            Logger.error(err, 'User Service')
+            throw err
+        }
+    }
+    async getUsersByFilter(filter) {
+        try {
+            if (!filter) {
+                return []
+            }
+            const users = await this.userModel.find(filter)
+
+            return users.map(user => {
+                const { name, mail, _id, profile } = user
+                return { name, mail, _id, profile }
+            })
+        } catch (err) {
             Logger.error(err, 'User Service')
             throw err
         }

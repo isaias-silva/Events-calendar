@@ -2,6 +2,7 @@ import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeVa
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { EventApproveDto } from 'src/dtos/event.approve.dto';
 import { EventCreateDto } from 'src/dtos/event.create.dto';
 import { EventSubscribeDto } from 'src/dtos/event.subscribe.dto';
 import { EventUpdateDto } from 'src/dtos/event.update.dto';
@@ -16,6 +17,7 @@ import { EventService } from 'src/services/event/event.service';
 
 export class EventController {
     constructor(@Inject(EventService) private readonly eventService: EventService) { }
+    
     @Post('create')
     async createEvent(@Req() req: Request, @Body() event: EventCreateDto) {
         return await this.eventService.create(req["user"]._id, event)
@@ -24,6 +26,11 @@ export class EventController {
     @Post('subscribe')
     async subscribeEvent(@Req() req: Request, @Body() event: EventSubscribeDto) {
         return await this.eventService.subscribe(req["user"]._id, event._id)
+    }
+
+    @Post('/approve')
+    async approveInEvent(@Req() req: Request, @Body() data: EventApproveDto) {
+        return await this.eventService.approve(req["user"]._id, data.user, data._id)
     }
 
     @Get('get/me')
@@ -40,6 +47,17 @@ export class EventController {
     async getEvent(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.get(req["user"]._id, false, id)
     }
+   
+    @Get('get/applicants/:id')
+    async getApplicants(@Req() req: Request, @Param('id') id: string) {
+        return await this.eventService.getApplicants(req["user"]._id, id)
+    }
+   
+    @Get('get/participants/:id')
+    async getParticipants(@Req() req: Request, @Param('id') id: string) {
+        return await this.eventService.getParticipants(req["user"]._id, id)
+    }
+   
     @Put('update/:id')
     async updateEvent(@Req() req: Request, @Param('id') id: string, @Body() event: EventUpdateDto) {
         return await this.eventService.update(req["user"]._id, id, event)
@@ -67,6 +85,7 @@ export class EventController {
 
         return await this.eventService.delete(req["user"]._id, id)
     }
+
 
 
 }

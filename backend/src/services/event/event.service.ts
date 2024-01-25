@@ -68,6 +68,9 @@ export class EventService {
         try {
             if (_id) {
                 const eventDb = await this.eventModel.findOne({ owner, _id })
+                if (!eventDb) {
+                    throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+                }
                 const { title, describ, initDate, endDate, background, isPrivate, participants, applicants } = eventDb
                 const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate, participants, applicants }
                 return event
@@ -257,5 +260,46 @@ export class EventService {
             throw err
         }
 
+    }
+    async getApplicants(owner: string, _id: string) {
+        try {
+
+            const eventDb = await this.eventModel.findOne({ owner, _id })
+            if (!eventDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+            const { applicants } = eventDb
+
+            const $and = applicants.map((applicant) => {
+                return { _id: applicant }
+            })
+
+            const users = await this.userService.getUsersByFilter({ $and })
+            return users
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+            throw err
+        }
+    }
+    
+    async getParticipants(owner: string, _id: string) {
+        try {
+
+            const eventDb = await this.eventModel.findOne({ owner, _id })
+            if (!eventDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+            const { participants } = eventDb
+
+            const $and = participants.map((participant) => {
+                return { _id: participant }
+            })
+            
+            const users = await this.userService.getUsersByFilter({ $and })
+            return users
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+            throw err
+        }
     }
 }
