@@ -210,7 +210,6 @@ export class EventService {
             }
 
 
-
             if (eventDb.isPrivate) {
 
                 eventDb.applicants.push(user)
@@ -220,27 +219,14 @@ export class EventService {
             const [ownerDb, userDb] = await Promise.all([this.userService.get(eventDb.owner), this.userService.get(user)])
 
 
-            const bodyOwner = this.mailService.makeMessage(eventDb.isPrivate ? "pedido de participação!" : "inscrição de participante",
-                userDb.name,
-                `houve uma nova ${eventDb.isPrivate ? "solicitação de participação" : ""} inscrição no seu evento: "${eventDb.title}".
-            clique abaixo para acessar a página do evento.`,
-                `${process.env.FRONT}/event/${eventDb._id}`,
-                "acessar página do seu evento",
-                "https://cdn-icons-png.flaticon.com/512/6213/6213185.png")
-
-
-            const bodyUser = this.mailService.makeMessage(eventDb.isPrivate ? "solicitação enviada" : "confirmação de participação",
-                userDb.name,
-                `sua ${eventDb.isPrivate ? "solicitação de inscrição" : "inscrição"} foi enviada para o evento: "${eventDb.title}".
-                ${eventDb.isPrivate ? "aguarde a aprovação, do organizador do evento para poder participar. " : "você já está na lista de participantes"}
-                clique no link abaixo para acessar a página do evento.`,
-                `${process.env.FRONT}/event/${eventDb._id}`,
-                "acessar página do evento",
-                "https://cdn-icons-png.flaticon.com/512/6213/6213185.png")
+            
 
 
             await eventDb.save()
 
+            const bodyUser=this.mailService.generateMessage('invite user',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
+            const bodyOwner=this.mailService.generateMessage('invite owner',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
+            
 
             Promise.all([this.mailService.sendMail(ownerDb.mail, "inscrição nova", bodyOwner),
             this.mailService.sendMail(userDb.mail, "participação em evento", bodyUser)])
@@ -286,14 +272,8 @@ export class EventService {
             eventDb.participants.push(user)
             await eventDb.save()
 
-            const body = this.mailService.makeMessage(`Parabéns`,
-                userDb.name,
-                `sua inscrição no evento "${eventDb.title}" foi aprovada pelo organizador do evento, fique atento as datas para não perder!`,
-                `${process.env.FRONT}/event/${eventDb._id}`,
-                "acesse o evento na plataforma",
-                "https://i.pinimg.com/474x/b4/8b/0a/b48b0a592f9b3a9f076e16a637627003.jpg")
-
-
+            const body=this.mailService.generateMessage('invite approve',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
+            
             this.mailService.sendMail(userDb.mail, "inscrição aprovada", body)
             
             return { message: Responses.YOU_APPROVE_THE_USER_IN_EVENT }

@@ -78,16 +78,12 @@ export class UserService {
 
             const link = await this.generateLinkForValidate(code)
 
-            const body = this.mailService.makeMessage(
-                `seja bem vindo`,
-                user.name,
-                `seja bem vindo a events callendar! para validar o e-mail da sua conta clique no link abaixo: `,
-                link,
-                'validar e-mail',
-                "https://picsmemes.com/wp-content/uploads/2022/10/welcome-to-the-club-meme.jpg")
+           const body=this.mailService.generateMessage('wellcome',user.name,link)
 
+           if(body){
 
-            this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
+               this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
+           }
 
 
             return { message: Responses.USER_SUBSCRIBED, token }
@@ -219,16 +215,13 @@ export class UserService {
 
             if (decoded.code == exists.code) {
                 await this.userModel.updateOne({ _id }, { mailVerify: true })
-                const body = this.mailService.makeMessage(
-                    `Seu e-mail foi validado!`,
-                    exists.name,
-                    `seu e-mail foi validado com sucesso! você já pode programar seus eventos com maestria na nossa plataforma!`,
-                    process.env.FRONT,
-                    'acesse seu dashboard!',
-                    "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
+                
 
+                const body=this.mailService.generateMessage('mail verify',exists.name)
+                if(body){
 
-                this.mailService.sendMail(exists.mail, "e-mail validado!", body)
+                    this.mailService.sendMail(exists.mail, "e-mail validado!", body)
+                }
 
                 return { message: Responses.USER_MAIL_VALIDATE }
             } else {
