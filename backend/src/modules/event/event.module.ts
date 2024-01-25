@@ -11,7 +11,7 @@ import { UserService } from 'src/services/user/user.service';
         MongooseModule.forFeature([{ name: Event.name, schema: eventSchema }]),
         UserModule],
     controllers: [EventController],
-    providers: [EventService, UserService],
+    providers: [EventService],
     exports: [EventService]
 
 })

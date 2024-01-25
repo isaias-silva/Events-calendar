@@ -8,12 +8,16 @@ import { EventUpdateDto } from 'src/dtos/event.update.dto';
 import { Responses } from 'src/enums/Responses';
 import { Event } from 'src/schemas/event.schema';
 import { UserService } from '../user/user.service';
+import { MailService } from '../mail/mail.service';
 
 @Injectable()
 
 export class EventService {
     constructor(@InjectModel(Event.name) private readonly eventModel: Model<Event>,
-        @Inject(UserService) private readonly userService: UserService) {
+        @Inject(UserService) private readonly userService: UserService,
+        @Inject(MailService) private readonly mailService: MailService,
+
+    ) {
     }
 
     private async exists(filter): Promise<boolean> {
@@ -183,6 +187,7 @@ export class EventService {
     async subscribe(user: string, _id: string) {
         try {
             const eventDb = await this.eventModel.findOne({ _id })
+
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -204,14 +209,41 @@ export class EventService {
 
             }
 
+
+
             if (eventDb.isPrivate) {
 
                 eventDb.applicants.push(user)
             } else {
                 eventDb.participants.push(user)
             }
+            const [ownerDb, userDb] = await Promise.all([this.userService.get(eventDb.owner), this.userService.get(user)])
+
+
+            const bodyOwner = this.mailService.makeMessage(eventDb.isPrivate ? "pedido de participação!" : "inscrição de participante",
+                userDb.name,
+                `houve uma nova ${eventDb.isPrivate ? "solicitação de participação" : ""} inscrição no seu evento: "${eventDb.title}".
+            clique abaixo para acessar a página do evento.`,
+                `${process.env.FRONT}/event/${eventDb._id}`,
+                "acessar página do seu evento",
+                "https://cdn-icons-png.flaticon.com/512/6213/6213185.png")
+
+
+            const bodyUser = this.mailService.makeMessage(eventDb.isPrivate ? "solicitação enviada" : "confirmação de participação",
+                userDb.name,
+                `sua ${eventDb.isPrivate ? "solicitação de inscrição" : "inscrição"} foi enviada para o evento: "${eventDb.title}".
+                ${eventDb.isPrivate ? "aguarde a aprovação, do organizador do evento para poder participar. " : "você já está na lista de participantes"}
+                clique no link abaixo para acessar a página do evento.`,
+                `${process.env.FRONT}/event/${eventDb._id}`,
+                "acessar página do evento",
+                "https://cdn-icons-png.flaticon.com/512/6213/6213185.png")
+
 
             await eventDb.save()
+
+
+            Promise.all([this.mailService.sendMail(ownerDb.mail, "inscrição nova", bodyOwner),
+            this.mailService.sendMail(userDb.mail, "participação em evento", bodyUser)])
 
             return { message: Responses.YOU_SUBSCRIBE_IN_EVENT }
 
@@ -231,6 +263,7 @@ export class EventService {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
 
+            const userDb = await this.userService.get(user)
 
             const inParticipants = eventDb.participants.find(value => value == user)
             const inApplicants = eventDb.applicants.find(value => value == user)
@@ -249,10 +282,20 @@ export class EventService {
             }
 
             const indexOfUser = eventDb.applicants.indexOf(user)
-            eventDb.applicants.splice(1, indexOfUser)
+            eventDb.applicants.splice(indexOfUser,1)
             eventDb.participants.push(user)
             await eventDb.save()
 
+            const body = this.mailService.makeMessage(`Parabéns`,
+                userDb.name,
+                `sua inscrição no evento "${eventDb.title}" foi aprovada pelo organizador do evento, fique atento as datas para não perder!`,
+                `${process.env.FRONT}/event/${eventDb._id}`,
+                "acesse o evento na plataforma",
+                "https://i.pinimg.com/474x/b4/8b/0a/b48b0a592f9b3a9f076e16a637627003.jpg")
+
+
+            this.mailService.sendMail(userDb.mail, "inscrição aprovada", body)
+            
             return { message: Responses.YOU_APPROVE_THE_USER_IN_EVENT }
 
         } catch (err) {
@@ -270,18 +313,18 @@ export class EventService {
             }
             const { applicants } = eventDb
 
-            const $and = applicants.map((applicant) => {
-                return { _id: applicant }
+            const $or = applicants.map((applicant) => {
+                return { _id: applicant.toString() }
             })
 
-            const users = await this.userService.getUsersByFilter({ $and })
+            const users = await this.userService.getUsersByFilter({ $or})
             return users
         } catch (err) {
             Logger.error(err, 'Event Service')
             throw err
         }
     }
-    
+
     async getParticipants(owner: string, _id: string) {
         try {
 
@@ -291,11 +334,11 @@ export class EventService {
             }
             const { participants } = eventDb
 
-            const $and = participants.map((participant) => {
+            const $or = participants.map((participant) => {
                 return { _id: participant }
             })
-            
-            const users = await this.userService.getUsersByFilter({ $and })
+
+            const users = await this.userService.getUsersByFilter({ $or})
             return users
         } catch (err) {
             Logger.error(err, 'Event Service')
