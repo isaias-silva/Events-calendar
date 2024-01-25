@@ -170,11 +170,23 @@ export class EventService {
 
     async delete(owner: string, _id: string) {
         try {
-            const eventExists = await this.exists({ _id, owner })
-
+            const eventExists = await this.eventModel.findOne({ _id, owner })
             if (!eventExists) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
+
+            const { participants } = eventExists
+            participants.forEach(async (participant) => {
+                try {
+                    const user = await this.userService.get(participant)
+                    const body = this.mailService.generateMessage('cancel event', user.name, process.env.FRONT, eventExists)
+                    await this.mailService.sendMail(user.mail, "evento cancelado", body)
+
+                } catch (err) {
+                    Logger.error(err, 'Event Service')
+                }
+            })
+
             await this.eventModel.deleteOne({ _id })
             return { message: Responses.EVENT_DELETED }
 
@@ -219,14 +231,14 @@ export class EventService {
             const [ownerDb, userDb] = await Promise.all([this.userService.get(eventDb.owner), this.userService.get(user)])
 
 
-            
+
 
 
             await eventDb.save()
 
-            const bodyUser=this.mailService.generateMessage('invite user',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
-            const bodyOwner=this.mailService.generateMessage('invite owner',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
-            
+            const bodyUser = this.mailService.generateMessage('invite user', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+            const bodyOwner = this.mailService.generateMessage('invite owner', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+
 
             Promise.all([this.mailService.sendMail(ownerDb.mail, "inscrição nova", bodyOwner),
             this.mailService.sendMail(userDb.mail, "participação em evento", bodyUser)])
@@ -268,14 +280,14 @@ export class EventService {
             }
 
             const indexOfUser = eventDb.applicants.indexOf(user)
-            eventDb.applicants.splice(indexOfUser,1)
+            eventDb.applicants.splice(indexOfUser, 1)
             eventDb.participants.push(user)
             await eventDb.save()
 
-            const body=this.mailService.generateMessage('invite approve',userDb.name,`${process.env.FRONT}/event/${eventDb._id}`,eventDb)
-            
+            const body = this.mailService.generateMessage('invite approve', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+
             this.mailService.sendMail(userDb.mail, "inscrição aprovada", body)
-            
+
             return { message: Responses.YOU_APPROVE_THE_USER_IN_EVENT }
 
         } catch (err) {
@@ -297,7 +309,7 @@ export class EventService {
                 return { _id: applicant.toString() }
             })
 
-            const users = await this.userService.getUsersByFilter({ $or})
+            const users = await this.userService.getUsersByFilter({ $or })
             return users
         } catch (err) {
             Logger.error(err, 'Event Service')
@@ -318,7 +330,7 @@ export class EventService {
                 return { _id: participant }
             })
 
-            const users = await this.userService.getUsersByFilter({ $or})
+            const users = await this.userService.getUsersByFilter({ $or })
             return users
         } catch (err) {
             Logger.error(err, 'Event Service')
