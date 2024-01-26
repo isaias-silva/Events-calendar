@@ -1,0 +1,40 @@
+version: '1'
+services:
+  #MONGODB
+  eventsmongo:
+    image: mongo:3
+
+    restart: always
+
+    hostname: eventsmongo
+
+    volumes:
+      - ./mongodata:/data/db
+
+    ports:
+      - '27017:27017'
+
+    networks:
+      - eventsnetwork
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASS}
+
+  eventsapi:
+    restart: always
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - '8080:8080'
+
+    networks:
+      - eventsnetwork
+
+    depends_on:
+      - eventsmongo
+
+networks:
+  eventsnetwork:
+    driver: bridge

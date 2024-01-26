@@ -9,9 +9,11 @@ import { ExtractDomainMiddleware } from './middlewares/extractDomain.middleware'
 import { ScheduleModule } from '@nestjs/schedule';
 import { VerifyValidEventJob } from './jobs/verify.valid.event.job';
 
+const url = process.argv[2] == 'container' ? `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@eventsmongo:27017/admin` : 'mongodb://localhost:27017'
+
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost:27017'),
+  imports: [MongooseModule.forRoot(url),
   MulterModule.register({
     dest: '/upload',
   }),
