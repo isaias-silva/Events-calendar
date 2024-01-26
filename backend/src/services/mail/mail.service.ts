@@ -8,7 +8,11 @@ const creds = require('../../../auth.client.json')
 @Injectable()
 export class MailService {
 
-    generateMessage(type: 'wellcome' | 'mail verify' | 'invite user' | 'invite owner' | 'cancel event' | 'invite approve', userName: string, link?: string, event?: EventDocument) {
+    generateMessage(type: 'wellcome' | 'mail verify' | 'invite user' | 'invite owner' | 'cancel event' | 'invite approve' | 'invite guest' | 'invite guest approve',
+        userName: string,
+        link?: string,
+        event?: EventDocument,
+        secondUserName?: string) {
 
         let body
 
@@ -30,7 +34,7 @@ export class MailService {
                     userName,
                     `seu e-mail foi validado com sucesso! você já pode programar seus eventos e se inscrever em eventos com maestria na nossa plataforma!`,
                     process.env.FRONT,
-                    'acesse seu dashboard!',
+                    'acesse seu dashboard',
                     "https://i.pinimg.com/originals/55/62/45/556245f7b539f2645da5e4d0d59f42e5.jpg")
 
                 break
@@ -73,12 +77,30 @@ export class MailService {
                     "acesse a plataforma",
                     "https://i.pinimg.com/originals/1b/c4/5b/1bc45b0143e71af4a6791f79b5bb0762.jpg")
                 break
+
+            case 'invite guest':
+                body = this.makeMessage(`novo convite para participação!`,
+                    userName,
+                    `você foi convidado pelo organizador para o evento "${event.title}" acesse a plataforma para aceitar o convite e confirmar sua participação!`,
+                    link,
+                    "acesse a página do evento",
+                    "https://i.makeagif.com/media/2-28-2015/HYjOCA.gif")
+                break
+            case 'invite guest approve':
+                body = this.makeMessage(`convite aceito!`,
+                    userName,
+                    `o usuário ${secondUserName} acabou de aceitar seu convite para o evento "${event.title}", 
+                acesse a página do evento para ver todos os participantes do seu evento! `,
+                    link,
+                    "acessar página do evento",
+                    "https://i.makeagif.com/media/2-28-2015/HYjOCA.gif")
+                break
             default:
                 return null
-                
+
         }
 
-return body
+        return body
 
 
 

@@ -4,6 +4,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { EventApproveDto } from 'src/dtos/event.approve.dto';
 import { EventCreateDto } from 'src/dtos/event.create.dto';
+import { EventResponseApproveDto } from 'src/dtos/event.response.invite.dto';
 import { EventSubscribeDto } from 'src/dtos/event.subscribe.dto';
 import { EventUpdateDto } from 'src/dtos/event.update.dto';
 import { JwtGuard } from 'src/guards/jwt/jwt.guard';
@@ -36,28 +37,37 @@ export class EventController {
     async approveInEvent(@Req() req: Request, @Body() data: EventApproveDto) {
         return await this.eventService.approve(req["user"]._id, data.user, data._id)
     }
+    @Post('/send/invite')
+    async inviteEvent(@Req() req: Request, @Body() data: EventApproveDto) {
 
-    @Get('get/me')
+        return await this.eventService.toInvite(req["user"]._id, data._id, data.user)
+    }
+    @Post('/accept/invite')
+    async inviteAccept(@Req() req: Request, @Body() data: EventResponseApproveDto) {
+
+        return await this.eventService.respondToInvitation(req["user"]._id, data._id, data.accept)
+    }
+    @Get('me')
     async getMyEvents(@Req() req: Request) {
         return await this.eventService.get(req["user"]._id, false)
     }
 
-    @Get('get/all')
+    @Get('all')
     async getAllEvents(@Req() req: Request) {
         return await this.eventService.get(req["user"]._id, true)
     }
 
-    @Get('get/:id')
+    @Get('/:id')
     async getEvent(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.get(req["user"]._id, false, id)
     }
 
-    @Get('get/applicants/:id')
+    @Get('/applicants/:id')
     async getApplicants(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.getApplicants(req["user"]._id, id)
     }
 
-    @Get('get/participants/:id')
+    @Get('/participants/:id')
     async getParticipants(@Req() req: Request, @Param('id') id: string) {
         return await this.eventService.getParticipants(req["user"]._id, id)
     }
@@ -66,7 +76,7 @@ export class EventController {
     async getEventsWhereParticipant(@Req() req: Request) {
         return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "participant")
     }
-    @Get('get/where/applicate')
+    @Get('/where/applicate')
     async getEventsWhereApplicant(@Req() req: Request) {
         return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "applicant")
     }

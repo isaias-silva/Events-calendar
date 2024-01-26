@@ -14,6 +14,9 @@ export class Event {
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
     applicants: string[]
 
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] })
+    guests: string[]
+
     @Prop({ required: true })
     title: string;
 
