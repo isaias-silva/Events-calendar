@@ -145,21 +145,18 @@ export class UserService {
             throw err
         }
     }
-    async update(_id: string, domain: string, name?: string, mail?: string, profile?: Buffer) {
+    async update(_id: string, domain: string, name?: string) {
         try {
             const exists = await this.exists({ _id })
             if (!exists) {
                 throw new NotFoundException(Responses.USER_NOT_FOUND)
             }
-            const updatedInfo: { name?: string, mail?: string } = {}
+            const updatedInfo: { name?: string } = {}
 
             if (name) {
                 updatedInfo.name = name
             }
-            if (mail) {
-                updatedInfo.mail = mail
-            }
-
+        
             await this.userModel.updateOne({ _id }, updatedInfo)
             return { message: Responses.USER_UPDATED }
 
