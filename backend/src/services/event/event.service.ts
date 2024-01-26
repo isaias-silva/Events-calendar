@@ -103,7 +103,7 @@ export class EventService {
     async getAllDoc(): Promise<EventDocument[]> {
         try {
 
-            const events = await this.eventModel.find()
+            const events = await this.eventModel.find({isActive:true})
 
             return events
         } catch (err) {
@@ -163,7 +163,7 @@ export class EventService {
     }
     async invalidateEvent(_id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id })
+            const eventDb = await this.eventModel.findOne({ _id,isActive:true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -196,7 +196,7 @@ export class EventService {
 
     async updateBackground(owner: string, domain: string, _id: string, file: Buffer) {
         try {
-            const exist = await this.exists({ owner, _id })
+            const exist = await this.exists({ owner, _id,isActive:true})
             if (!exist) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -391,7 +391,7 @@ export class EventService {
     async toInvite(owner: string, user: string, _id: string) {
         try {
 
-            const eventDb = await this.eventModel.findOne({ owner, _id })
+            const eventDb = await this.eventModel.findOne({ owner, _id ,isActive:true})
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -427,7 +427,7 @@ export class EventService {
 
     async respondToInvitation(user: string, _id: string, accept: boolean) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id })
+            const eventDb = await this.eventModel.findOne({ _id ,isActive:true})
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
