@@ -9,8 +9,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Events Callendar Api')
-    .setDescription('api of callendar Api')
+    .setDescription('api of Events callendar')
     .setVersion('1.0')
+    .setContact("isaias silva","https://github.com/isaias-silva","isaiasgarraeluta@gmail.com")
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

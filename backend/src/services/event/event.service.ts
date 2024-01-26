@@ -411,13 +411,9 @@ export class EventService {
 
                 await this.mailService.sendMail(ownerDb.mail, "convite aceito", body)
             }
-
-
             await eventDb.save()
-
-
             return { message:accept?Responses.EVENT_INVITE_ACCEPT:Responses.EVENT_INIVITE_REJECT }
-
+      
         } catch (err) {
             Logger.error(err, 'Event Service')
             throw err

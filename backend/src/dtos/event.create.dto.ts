@@ -1,13 +1,16 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsNotEmpty, IsOptional, isNotEmpty } from "class-validator";
+import { IsDateString, IsNotEmpty, IsOptional, MinLength } from "class-validator";
 
 export class EventCreateDto {
     @IsNotEmpty()
+    @MinLength(3)
+
     @ApiProperty()
     title: string
 
     @IsNotEmpty()
     @ApiProperty()
+    @MinLength(20)
 
     describ: string
 
