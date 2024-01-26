@@ -6,7 +6,7 @@ import { resolve } from 'path';
 import { EventCreateDto } from 'src/dtos/event.create.dto';
 import { EventUpdateDto } from 'src/dtos/event.update.dto';
 import { Responses } from 'src/enums/Responses';
-import { Event } from 'src/schemas/event.schema';
+import { Event, EventDocument } from 'src/schemas/event.schema';
 import { UserService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
 
@@ -100,6 +100,17 @@ export class EventService {
             throw err
         }
     }
+    async getAllDoc(): Promise<EventDocument[]> {
+        try {
+
+            const events = await this.eventModel.find()
+
+            return events
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+
+        }
+    }
     async update(owner: string, _id: string, event: EventUpdateDto) {
         try {
             const { title, initString, endString, describ } = event
@@ -149,6 +160,38 @@ export class EventService {
             throw err
         }
 
+    }
+    async invalidateEvent(_id: string) {
+        try {
+            const eventDb = await this.eventModel.findOne({ _id })
+            if (!eventDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+            await this.eventModel.updateOne({ _id }, { isActive: false })
+
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+        }
+    }
+    async sendNotify(_id: string) {
+        try {
+            const eventDb = await this.eventModel.findOne({ _id })
+            if (!eventDb) {
+                throw new NotFoundException(Responses.EVENT_NOT_FOUND)
+            }
+            const { participants } = eventDb
+           
+            await this.eventModel.updateOne({ _id }, { usersNotify: true })
+           
+            participants.forEach(async participant => {
+                const user = await this.userService.get(participant)
+                const body = this.mailService.generateMessage("event is today", user.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+                await this.mailService.sendMail(user.mail, "É hoje!!!", body)
+            })
+
+        } catch (err) {
+            Logger.error(err, 'Event Service')
+        }
     }
 
     async updateBackground(owner: string, domain: string, _id: string, file: Buffer) {
@@ -412,8 +455,8 @@ export class EventService {
                 await this.mailService.sendMail(ownerDb.mail, "convite aceito", body)
             }
             await eventDb.save()
-            return { message:accept?Responses.EVENT_INVITE_ACCEPT:Responses.EVENT_INIVITE_REJECT }
-      
+            return { message: accept ? Responses.EVENT_INVITE_ACCEPT : Responses.EVENT_INIVITE_REJECT }
+
         } catch (err) {
             Logger.error(err, 'Event Service')
             throw err
@@ -498,7 +541,7 @@ export class EventService {
                 type == 'guest' ? { guests: { $in: [user] } } :
                     { applicants: { $in: [user] } }
             filter["isActive"] = true
-          
+
             const eventsDb = await this.eventModel.find(
                 filter
             )

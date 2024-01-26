@@ -7,6 +7,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ExtractDomainMiddleware } from './middlewares/extractDomain.middleware';
 import { ScheduleModule } from '@nestjs/schedule';
+import { VerifyValidEventJob } from './jobs/verify.valid.event.job';
 
 
 @Module({
@@ -24,7 +25,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     EventModule
   ],
   controllers: [],
-  providers: [],
+  providers: [VerifyValidEventJob],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

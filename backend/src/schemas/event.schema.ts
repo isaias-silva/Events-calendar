@@ -40,6 +40,9 @@ export class Event {
     @Prop({ default: true, require: true })
     isActive: boolean
 
+    @Prop({ default: false, require: true })
+    usersNotify: boolean
+
 
 
 }

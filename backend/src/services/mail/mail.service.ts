@@ -8,7 +8,7 @@ const creds = require('../../../auth.client.json')
 @Injectable()
 export class MailService {
 
-    generateMessage(type: 'wellcome' | 'mail verify' | 'invite user' | 'invite owner' | 'cancel event' | 'invite approve' | 'invite guest' | 'invite guest approve',
+    generateMessage(type: 'wellcome' | 'mail verify' | 'invite user' | 'invite owner' | 'cancel event' | 'invite approve' | 'invite guest' | 'invite guest approve' | 'event is today',
         userName: string,
         link?: string,
         event?: EventDocument,
@@ -95,6 +95,17 @@ export class MailService {
                     "acessar página do evento",
                     "https://i.makeagif.com/media/2-28-2015/HYjOCA.gif")
                 break
+
+            case "event is today":
+                body = this.makeMessage(`É HOJE!`,
+                    userName,
+                    `O evento "${event.title}" ao qual você é inscrito ocorrerá hoje! 
+                    lembre-se de não se atrasar para comparecer! clique no link abaixo para acessar a página do evento!`,
+                    link,
+                    "acessar página do evento",
+                    "https://i.makeagif.com/media/2-28-2015/HYjOCA.gif")
+                break
+              
             default:
                 return null
 
