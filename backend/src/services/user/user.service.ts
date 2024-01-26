@@ -78,12 +78,12 @@ export class UserService {
 
             const link = await this.generateLinkForValidate(code)
 
-           const body=this.mailService.generateMessage('wellcome',user.name,link)
+            const body = this.mailService.generateMessage('wellcome', user.name, link)
 
-           if(body){
+            if (body) {
 
-               this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
-           }
+                this.mailService.sendMail(user.mail, "valide seu e-mail!", body)
+            }
 
 
             return { message: Responses.USER_SUBSCRIBED, token }
@@ -114,7 +114,7 @@ export class UserService {
 
     async getAllUsers() {
         try {
-            const userAll = await this.userModel.find()
+            const userAll = await this.userModel.find({ mailVerify: true })
 
             const usersFormat = userAll.map(user => {
                 const { name, profile, mail, _id } = user
@@ -215,10 +215,10 @@ export class UserService {
 
             if (decoded.code == exists.code) {
                 await this.userModel.updateOne({ _id }, { mailVerify: true })
-                
 
-                const body=this.mailService.generateMessage('mail verify',exists.name)
-                if(body){
+
+                const body = this.mailService.generateMessage('mail verify', exists.name)
+                if (body) {
 
                     this.mailService.sendMail(exists.mail, "e-mail validado!", body)
                 }

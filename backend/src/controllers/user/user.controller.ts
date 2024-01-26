@@ -48,6 +48,15 @@ export class UserController {
     }
 
     @ApiBearerAuth()
+    @Get('all')
+    @UseGuards(JwtGuard)
+    
+    async getAll(@Req() req: Request) {
+        return await this.userService.getAllUsers()
+
+    }
+
+    @ApiBearerAuth()
     @Get('validate')
     @UseGuards(JwtGuard)
     async validateMail(@Req() req: Request, @Query('token') token: string) {

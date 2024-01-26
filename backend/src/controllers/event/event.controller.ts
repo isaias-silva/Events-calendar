@@ -40,7 +40,7 @@ export class EventController {
     @Post('/send/invite')
     async inviteEvent(@Req() req: Request, @Body() data: EventApproveDto) {
 
-        return await this.eventService.toInvite(req["user"]._id, data._id, data.user)
+        return await this.eventService.toInvite(req["user"]._id, data.user, data._id)
     }
     @Post('/accept/invite')
     async inviteAccept(@Req() req: Request, @Body() data: EventResponseApproveDto) {
@@ -72,13 +72,22 @@ export class EventController {
         return await this.eventService.getParticipants(req["user"]._id, id)
     }
 
+    @Get('/guests/:id')
+    async getGuests(@Req() req: Request, @Param('id') id: string) {
+        return await this.eventService.getGuests(req["user"]._id, id)
+    }
+
     @Get('/where/participate')
     async getEventsWhereParticipant(@Req() req: Request) {
-        return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "participant")
+        return await this.eventService.getSubscribeOrApplicantsOrGuestEvents(req["user"]._id, "participant")
     }
     @Get('/where/applicate')
     async getEventsWhereApplicant(@Req() req: Request) {
-        return await this.eventService.getSubscribeOrApplicantsEvents(req["user"]._id, "applicant")
+        return await this.eventService.getSubscribeOrApplicantsOrGuestEvents(req["user"]._id, "applicant")
+    }
+    @Get('/where/guest')
+    async getEventsWhereGuest(@Req() req: Request) {
+        return await this.eventService.getSubscribeOrApplicantsOrGuestEvents(req["user"]._id, "guest")
     }
     @Put('update/:id')
     async updateEvent(@Req() req: Request, @Param('id') id: string, @Body() event: EventUpdateDto) {

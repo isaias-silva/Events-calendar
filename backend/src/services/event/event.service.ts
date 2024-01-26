@@ -347,6 +347,7 @@ export class EventService {
     }
     async toInvite(owner: string, user: string, _id: string) {
         try {
+
             const eventDb = await this.eventModel.findOne({ owner, _id })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
@@ -408,14 +409,14 @@ export class EventService {
 
                 const body = this.mailService.generateMessage("invite guest approve", ownerDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb, userDb.name)
 
-                await this.mailService.sendMail(ownerDb.mail, "novo convite", body)
+                await this.mailService.sendMail(ownerDb.mail, "convite aceito", body)
             }
 
 
             await eventDb.save()
 
 
-            return { message: Responses.INVITE_SEND_FOR_USER }
+            return { message:accept?Responses.EVENT_INVITE_ACCEPT:Responses.EVENT_INIVITE_REJECT }
 
         } catch (err) {
             Logger.error(err, 'Event Service')
@@ -494,10 +495,19 @@ export class EventService {
             throw err
         }
     }
-    async getSubscribeOrApplicantsEvents(user: string, type: 'participant' | 'applicant') {
+    async getSubscribeOrApplicantsOrGuestEvents(user: string, type: 'participant' | 'applicant' | 'guest') {
         try {
 
-            const eventsDb = await this.eventModel.find(type == 'participant' ? { participants: { $in: [user] } } : { participants: { $in: [user] } })
+            const filter: any = type == 'participant' ? { participants: { $in: [user] } } :
+                type == 'guest' ? { guests: { $in: [user] } } :
+                    { applicants: { $in: [user] } }
+            filter["isActive"] = true
+          
+            const eventsDb = await this.eventModel.find(
+                filter
+            )
+
+
             if (!eventsDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
