@@ -22,7 +22,7 @@ DB_PASS="senha de acesso do root para o banco de dados mongodb"
 
 
 ```
- após esse arquivo de configuração ser criado, é necessário gerar um json para acesso a api de e-mail pelo google developers, o arquivo deverá ficar na pasta raiz do projeto também e nomeado como ``auth.client.json ``, sua configuração seria dessa forma:
+ após esse arquivo de configuração ser criado, é necessário gerar um json para acesso a api de e-mail do google via Oauth2, o arquivo deverá ficar na pasta raiz do projeto também e nomeado como ``auth.client.json ``, sua configuração seria dessa forma:
  ```json
 
  {
