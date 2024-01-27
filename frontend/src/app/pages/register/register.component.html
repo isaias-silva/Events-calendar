@@ -1,0 +1,31 @@
+<div class="box">
+
+    <form >
+        <fieldset>
+            <legend>Cadastre-se na plataforma</legend>
+            <div class="form-field">
+                <label>Nome:</label>
+                <input name="name" formControlName="text">
+            </div>
+            <div class="form-field">
+                <label>Email:</label>
+                <input name="email" formControlName="email">
+            </div>
+            
+            <div class="form-field">
+                <label>Senha:</label>
+                <input name="password" formControlName="password" 
+                       type="password">
+            </div>
+            <div class="form-field">
+                <label>Repita a senha:</label>
+                <input name="password-repite" formControlName="password" 
+                       type="password">
+            </div>
+        </fieldset>
+        <div class="form-buttons">
+            <button class="button button-primary">Cadastre-se</button>
+            <a href="login">já possui uma conta?</a>
+        </div>
+    </form>
+</div>

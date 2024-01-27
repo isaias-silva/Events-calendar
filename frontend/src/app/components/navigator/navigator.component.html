@@ -1,8 +1,9 @@
+<button class="button-expand" (click)="changeVisibile()" >
+    <mat-icon>{{visible?'keyboard_arrow_right':'keyboard_arrow_left'}}</mat-icon>
+  </button>
+
 <nav [class.max]="visible" [class.min]="!visible">
-    <button class="button-expand" (click)="changeVisibile()" >
-        <mat-icon>{{visible?'keyboard_arrow_left':'keyboard_arrow_right'}}</mat-icon>
-      </button>
-    <ul>
+      <ul>
    
       <li><a href="/"><mat-icon fontIcon="face"></mat-icon> <span class="info">Perfil</span></a></li>
       <li><a href="/calendar"><mat-icon fontIcon="calendar_today"></mat-icon> <span class="info">Meu Calendário</span></a></li>
