@@ -1,0 +1,85 @@
+@import "../../../styles.scss";
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: 15%;
+  background-color: $component-color;
+  box-shadow: 1px 1px 4px #333;
+  color: #fff;
+  transition: width 0.5s ease;
+  backdrop-filter: blur(2px);
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+    list-style-type: none;
+    height: 80%;
+    justify-content: space-between;
+    width: 100%;
+    li {
+      a {
+        display: flex;
+
+        text-decoration: none;
+        color: #333;
+        font-size: 18px;
+        align-items: center;
+        justify-content: space-around;
+        padding: 10px;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .button-expand {
+    background-color: #0000001c;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      color: #fff;
+    }
+
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+
+  &.min {
+    width: 5%;
+    .info {
+      display: none;
+    }
+    .button-expand {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width:764px) {
+    nav{
+        width: 100%;
+        &.min {
+            width: 20%;
+        }
+    }
+
+   
+}
+

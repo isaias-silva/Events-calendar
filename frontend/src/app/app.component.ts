@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AsideComponent } from './components/aside/aside.component';
+import { NavigatorComponent } from './components/navigator/navigator.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,AsideComponent],
+  imports: [RouterOutlet,NavigatorComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
