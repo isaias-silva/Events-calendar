@@ -1,20 +1,19 @@
 <div class="box">
 
-    <form >
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
         <fieldset>
             <legend>Entrar na plataforma</legend>
             <div class="form-field">
                 <label>Email:</label>
-                <input name="email" formControlName="email">
+                <input name="email" formControlName="mail" [formControl]="form.controls.mail">
             </div>
             <div class="form-field">
                 <label>Senha:</label>
-                <input name="password" formControlName="password" 
-                       type="password">
+                <input name="password" formControlName="password" type="password" [formControl]="form.controls.password">
             </div>
         </fieldset>
         <div class="form-buttons">
-            <button class="button button-primary">Entre</button>
+            <button type="submit" class="button button-primary">Entre</button>
             <a href="register">ou cadastre-se</a>
         </div>
     </form>
