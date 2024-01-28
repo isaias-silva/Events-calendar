@@ -1,0 +1,27 @@
+@import "../../../../styles.scss";
+.dialog-edit {
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+  input {
+    width: 80%;
+    height: 40px;
+    border: 1px solid $font-color;
+    border-radius: 5px;
+
+    padding: 2px;
+  }
+  button {
+    width: 50%;
+    margin-top: 10px;
+    height: 40px;
+  }
+}
+
+@media screen and (max-width: 764px) {
+  .dialog-edit {
+    width: 200px;
+    padding: 25px;
+    text-align: center;
+  }
+}

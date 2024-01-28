@@ -24,7 +24,15 @@
     left:0;
     z-index: 1;
   }
-
+.edit-button{
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  position: absolute;
+  top:0;
+  right:0;
+  z-index: 2;
+}
   .block-info {
     position: relative;
     margin-left: 10px;

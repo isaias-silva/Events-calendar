@@ -23,7 +23,7 @@ export class UserService {
     }))
   }
   register(name: string, mail: string, password: string) {
-   
+
     return this.http.post<JwtResponse>(`${this.apiUrl}/user/subscribe`, { name, mail, password }).pipe(tap((response) => {
       localStorage.setItem('auth-token', response.token)
 
@@ -39,6 +39,10 @@ export class UserService {
 
   getUser() {
     return this.http.get<UserData>(`${this.apiUrl}/user/me`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
+  }
+  updateName(name: string) {
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update`, { name }, { headers: { "authorization": `Bearer ${this.getToken()}` } })
+
   }
   updateProfileUser(file: ArrayBuffer) {
     return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`, { file }, { headers: { "authorization": `Bearer ${this.getToken()}` } })

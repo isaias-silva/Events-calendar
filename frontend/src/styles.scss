@@ -26,6 +26,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: $buttons-color;
     transition: background-color 0.3s ease;   
     color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+
     &:hover{
         background-color: $buttons-color-hover;
         

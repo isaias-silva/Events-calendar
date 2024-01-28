@@ -1,0 +1,12 @@
+<div mat-dialog-content class="dialog-edit">
+    <form [formGroup]="form" (ngSubmit)="update()">
+        <h2>Atualizar dados</h2>
+        <div>
+            <input type="text" formControlName="name" placeholder="seu novo nome">
+            <button>Salvar</button>
+        </div>
+
+
+    </form>
+
+</div>

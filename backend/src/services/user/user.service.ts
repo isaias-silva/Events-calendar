@@ -145,7 +145,7 @@ export class UserService {
             throw err
         }
     }
-    async update(_id: string, domain: string, name?: string) {
+    async update(_id: string, name?: string) {
         try {
             const exists = await this.exists({ _id })
             if (!exists) {

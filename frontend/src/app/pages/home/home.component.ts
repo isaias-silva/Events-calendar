@@ -4,18 +4,20 @@ import { UserService } from '../../services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { UserData } from '../../../interfaces/user.data.interface';
 import { CommonModule } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DialogEditProfileComponent } from '../../components/views/dialog-edit-profile/dialog-edit-profile.component';
 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HttpClientModule, ProfileComponent,CommonModule],
+  imports: [HttpClientModule, ProfileComponent,CommonModule,MatDialogModule],
   providers: [UserService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService , public dialog: MatDialog) { }
   user: UserData | undefined;
   ngOnInit(): void {
     this.userService.getUser().subscribe((response) => {
@@ -27,4 +29,14 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  openDialogEdit(): void {
+
+    const dialogRef = this.dialog.open(DialogEditProfileComponent, {
+    
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+     
+    });
+  }
 }
