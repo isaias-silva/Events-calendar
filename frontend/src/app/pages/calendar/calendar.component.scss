@@ -1,3 +1,4 @@
+@import "../../../styles.scss";
 .box {
   display: flex;
   width: 100%;
@@ -6,7 +7,7 @@
   flex-direction: column;
 
   .demo-inline-calendar-card {
-    width: 400px;
+    width: 300px;
     
   }
 
@@ -32,4 +33,12 @@ color:#000;
         border-radius: 10px;
        
     }
+}
+@media screen and (max-width: 764px) {
+  .demo-inline-calendar-card {
+    width: 200px;
+    
+  }
+
+
 }

@@ -1,0 +1,16 @@
+@import "../../../styles.scss";
+.events-container{
+    width: 90%;
+    margin-left: 10%;
+   
+    h2{
+        font-weight: bold;
+    }
+}
+.create-event{
+    padding: 20px;
+    font-size: 16px;
+    position: absolute;
+    top:0;
+    right: 0;
+}
