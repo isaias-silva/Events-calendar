@@ -13,7 +13,8 @@ import { ViewEncapsulation } from "@angular/core";
   encapsulation: ViewEncapsulation.None
 })
 export class CalendarComponent {
-  selected: Date | DateRange<Date> | null = null
+  
+  selected: Date | DateRange<Date>|null= new Date()
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
 

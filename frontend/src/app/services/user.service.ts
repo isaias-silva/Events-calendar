@@ -6,6 +6,7 @@ import { tap } from 'rxjs';
 import { UserData } from '../../interfaces/user.data.interface';
 import { GlobalResponse } from '../../interfaces/global.responses.interface';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -45,7 +46,8 @@ export class UserService {
 
   }
   updateProfileUser(file: ArrayBuffer) {
-    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`, { file }, { headers: { "authorization": `Bearer ${this.getToken()}` } })
+
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`, {file}, { headers: { "authorization": `Bearer ${this.getToken()}`  }})
   }
 
 
