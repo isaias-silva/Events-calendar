@@ -1,8 +1,9 @@
-<button class="button-expand" (click)="changeVisibile()" >
-    <mat-icon>{{visible?'keyboard_arrow_right':'keyboard_arrow_left'}}</mat-icon>
+<div *ngIf="visible"> 
+  <button class="button-expand" (click)="changeVisibile()" >
+    <mat-icon>{{max?'keyboard_arrow_right':'keyboard_arrow_left'}}</mat-icon>
   </button>
 
-<nav [class.max]="visible" [class.min]="!visible">
+<nav [class.max]="max" [class.min]="!max">
       <ul>
    
       <li><a href="/"><mat-icon fontIcon="face"></mat-icon> <span class="info">Perfil</span></a></li>
@@ -14,3 +15,5 @@
    
     </ul>
   </nav>
+
+</div>

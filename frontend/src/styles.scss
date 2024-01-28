@@ -1,5 +1,10 @@
 $component-color: #68b1ff95;
-
+$font-color: #333;
+$secondary-font-color:#555;
+$buttons-color:#007bff;
+$buttons-color-hover:#0056b3;;
+$link-color:rgb(0, 157, 142);
+$link-color-hover:rgb(0, 151, 202);
 *{
 margin:0;
 padding: 0;
@@ -7,3 +12,25 @@ padding: 0;
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+* a{
+    color:$link-color;
+    transition: color 0.5s ease;
+    text-decoration: none;
+    font-weight: bold;
+    &:hover{
+        color:$link-color-hover;
+        text-decoration:underline ;
+    }
+}
+* button{
+    background-color: $buttons-color;
+    transition: background-color 0.3s ease;   
+    color: #fff;
+    &:hover{
+        background-color: $buttons-color-hover;
+        
+    }
+    &.disabled{
+        background-color: #5555551f;
+    }
+}

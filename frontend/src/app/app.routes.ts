@@ -3,9 +3,15 @@ import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
+import { isLoginGuard } from './guards/is-login.guard';
+import { LogoutComponent } from './pages/logout/logout.component';
+import { isValidMailGuard } from './guards/is-valid-mail.guard';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'calendar', component: CalendarComponent },
-    { path: '', component: HomeComponent }];
+    { path: 'calendar', component: CalendarComponent, canActivate: [isLoginGuard,isValidMailGuard] },
+    { path: '', component: HomeComponent, canActivate: [isLoginGuard] },
+    { path: 'logout', component: LogoutComponent },
+
+];

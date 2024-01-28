@@ -1,10 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [FormsModule],
+  providers: [UserService],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -13,18 +15,25 @@ export class ProfileComponent {
 
   imageUpload: string | undefined;
 
-  changeImage(event: any) {
+  constructor(private userService: UserService) { }
+
+  async changeImage(event: any) {
     console.log(event.target.files[0])
     if (event.target.files && event.target.files[0]) {
       if (event.target.files[0].type.includes("image") == false) {
+
         this.imageUpload = undefined
 
         this.image = "../../../assets/corrupted.png"
       } else {
         this.image = URL.createObjectURL(event.target.files[0]);
+       this.userService.updateProfileUser(event.target.files[0].arrayBuffer()).subscribe((response)=>{
+        console.log(response)
+       })
       }
 
     }
 
   }
+  
 }

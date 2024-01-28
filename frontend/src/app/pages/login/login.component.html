@@ -1,20 +1,21 @@
 <div class="box">
 
     <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <img src="assets/calle.png" alt="" srcset="">
         <fieldset>
-            <legend>Entrar na plataforma</legend>
+         
             <div class="form-field">
-                <label>Email:</label>
-                <input name="email" formControlName="mail" [formControl]="form.controls.mail">
+                
+                <input name="email" placeholder="seu e-mail" formControlName="mail" [formControl]="form.controls.mail">
             </div>
             <div class="form-field">
-                <label>Senha:</label>
-                <input name="password" formControlName="password" type="password" [formControl]="form.controls.password">
+               
+                <input name="password" placeholder="sua senha" formControlName="password" type="password" [formControl]="form.controls.password">
             </div>
         </fieldset>
         <div class="form-buttons">
-            <button type="submit" class="button button-primary">Entre</button>
-            <a href="register">ou cadastre-se</a>
+            <button type="submit" class="button button-primary"  [class.disabled]="form.invalid">Entrar no Events Callendar</button>
+            <a href="register">Não possui conta? cadastre-se</a>
         </div>
     </form>
 </div>

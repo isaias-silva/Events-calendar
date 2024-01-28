@@ -1,30 +1,30 @@
 <div class="box">
 
-    <form >
+    <form  [formGroup]="form" (ngSubmit)="submitForm()" >
         <fieldset>
-            <legend>Cadastre-se na plataforma</legend>
+            <img src="assets/calle.png" alt="" srcset="">
             <div class="form-field">
-                <label>Nome:</label>
-                <input name="name" formControlName="text">
+              
+                <input name="name" placeholder="seu nome" formControlName="name" [formControl]="form.controls.name">
             </div>
             <div class="form-field">
-                <label>Email:</label>
-                <input name="email" formControlName="email">
+               
+                <input name="email" placeholder="seu e-mail" formControlName="mail" [formControl]="form.controls.mail">
             </div>
             
             <div class="form-field">
-                <label>Senha:</label>
-                <input name="password" formControlName="password" 
-                       type="password">
+           
+                <input placeholder="sua senha" name="password" formControlName="password"  
+                       type="password" [formControl]="form.controls.password">
             </div>
             <div class="form-field">
-                <label>Repita a senha:</label>
-                <input name="password-repite" formControlName="password" 
+              
+                <input name="password-repite" placeholder="sua senha novamente" formControlName="passwordRepite" [formControl]="form.controls.passwordRepite" 
                        type="password">
             </div>
         </fieldset>
         <div class="form-buttons">
-            <button class="button button-primary">Cadastre-se</button>
+            <button class="button button-primary" [class.disabled]="form.invalid">Cadastre-se no Events Callendar</button>
             <a href="login">já possui uma conta?</a>
         </div>
     </form>

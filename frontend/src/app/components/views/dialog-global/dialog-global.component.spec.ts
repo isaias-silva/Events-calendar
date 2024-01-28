@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogLoginComponent } from './dialog-login.component';
+import { DialogGlobalComponent } from './dialog-global.componen';
 
-describe('DialogLoginComponent', () => {
-  let component: DialogLoginComponent;
-  let fixture: ComponentFixture<DialogLoginComponent>;
+describe('DialogGlobalComponent', () => {
+  let component: DialogGlobalComponent;
+  let fixture: ComponentFixture<DialogGlobalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DialogLoginComponent]
+      imports: [DialogGlobalComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(DialogLoginComponent);
+    fixture = TestBed.createComponent(DialogGlobalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
