@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Event } from '../../../interfaces/event.interface';
 
 @Component({
@@ -9,6 +9,7 @@ import { Event } from '../../../interfaces/event.interface';
   styleUrl: './events-card.component.scss'
 })
 export class EventsCardComponent implements OnInit {
+ 
   ngOnInit(): void {
     if (this.event) {
       this.event.describ = this.resume(this.event.describ)

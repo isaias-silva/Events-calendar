@@ -55,7 +55,7 @@ export class CreateEventComponent {
         title,
         describ: description,
         initString:initDateObject.toISOString(),
-        endString:initDateObject.toISOString(),
+        endString:endDateObject.toISOString(),
         isPrivate
       }
 
