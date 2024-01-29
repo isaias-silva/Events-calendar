@@ -1,22 +1,37 @@
 @import "../../../styles.scss";
-.events-container{
-    width: 90%;
-    margin-left: 7%;
-   
-  
+.events-container {
+  width: 90%;
+  margin-left: 7%;
 }
-.create-event{
-    padding: 20px;
-    font-size: 12px;
-    position: absolute;
-    top:0;
-    right: 0;
+.create-event {
+  padding: 10px;
+  font-size: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
-.block-events{
+.block-events {
   margin-top: 50px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+@media screen and (max-width: 764px) {
+  .events-container {
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+    margin: 0;
+
+    .create-event {
+      padding: 7px;
+      font-size: 10px;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    .block-events {
+      margin: 0;
+    }
+  }
 }

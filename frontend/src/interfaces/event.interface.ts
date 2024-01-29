@@ -1,8 +1,8 @@
 export interface Event {
     title: string,
     describ: string,
-    initDate: Date,
-    endDate: Date,
+    initDate: string,
+    endDate: string,
     background?: string,
     _id: string,
     owner: string,

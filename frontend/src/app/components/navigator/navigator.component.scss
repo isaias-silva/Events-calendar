@@ -10,11 +10,11 @@ nav {
   background-color: $component-color;
   box-shadow: 1px 1px 4px $font-color;
   color: #fff;
-  transition: width 0.3s ease, color 0.3s ease,opacity 0.3s ease;
+  transition: width 0.3s ease, color 0.3s ease, opacity 0.3s ease;
   backdrop-filter: blur(4px);
 
   ul {
-    margin-top:50px;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,21 +55,21 @@ nav {
 .button-expand {
   background-color: #00000068;
   border: none;
-  
+
   border-radius: 100%;
   cursor: pointer;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease, color 0.3s ease,opacity 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
   position: fixed;
   z-index: 100000 !important;
-width: 30px;
-height: 30px;
-  top:10px;
-  left:15px;
-  opacity: 0.5;
+  width: 30px;
+  height: 30px;
+  top: 10px;
+  left: 15px;
+  opacity: 0.2;
 
   &:hover {
     opacity: 1;
@@ -90,6 +90,8 @@ height: 30px;
       background-color: none;
       box-shadow: none;
       opacity: 0;
+
+    
     }
   }
 }

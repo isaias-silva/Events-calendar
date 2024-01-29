@@ -3,7 +3,8 @@
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px;
-    margin-bottom: 16px;
+    margin: 10px;
+    
     min-width: 250px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -31,8 +32,19 @@
 
   .date .init::before {
     content: "Início: ";
+    font-weight: bold;
   }
 
   .date .end::before {
     content: "Fim: ";
+    font-weight: bold;
   }
+
+
+@media screen and (max-width:764px) {
+
+ .card{
+  margin:auto;
+  margin-bottom: 10px;
+ }
+}
