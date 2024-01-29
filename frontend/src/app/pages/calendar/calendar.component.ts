@@ -33,7 +33,7 @@ export class CalendarComponent implements OnInit {
 
 
   updateEvents() {
-    alert(this.type)
+    
     if (this.type == "me") {
 
       this.eventService.getEvents(this.type).subscribe(response => {
@@ -50,7 +50,7 @@ export class CalendarComponent implements OnInit {
   selected: Date | DateRange<Date> | null = new Date();
 
 
-  @Input() type: "me" | "partipant" = "me"
+  type: "me" | "partipant" = "me"
 
 
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {

@@ -1,9 +1,10 @@
-export interface UserData{
+export interface UserData {
     name: string;
 
     mail: string
 
     mailVerify: boolean;
 
-    profile?: string
+    profile?: string;
+    _id: string
 }

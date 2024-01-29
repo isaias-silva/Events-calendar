@@ -1,0 +1,61 @@
+@import "../../../styles.scss";
+.event-card {
+  display: flex;
+  width: 60%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.316);
+  color:$font-color;
+  position:relative
+}
+.edit-button{
+  width: 80px;
+  height: 40px;
+  font-size: 16px;
+  position: absolute;
+  bottom:1;
+  right: 0;
+  margin: 2px;
+  padding: 2px;
+}
+.background {
+  flex: 0 0 30%; 
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.event-details {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  h1{
+    width: 85%;
+  }
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.description, .info {
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* Adicione seu próprio ícone ou imagem */
+.material-icons {
+  font-size: 48px;
+}

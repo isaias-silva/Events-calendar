@@ -104,7 +104,7 @@ export class UserService {
             }
             const { name, profile, mail, mailVerify } = user
 
-            return { name, profile, mail, mailVerify }
+            return { name, profile, mail, mailVerify, _id}
         }
         catch (err) {
             Logger.error(err, 'User Service')

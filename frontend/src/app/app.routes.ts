@@ -8,15 +8,16 @@ import { LogoutComponent } from './pages/logout/logout.component';
 import { isValidMailGuard } from './guards/is-valid-mail.guard';
 import { EventsComponent } from './pages/events/events.component';
 import { ValidateMailComponent } from './pages/validate-mail/validate-mail.component';
+import { EventComponent } from './pages/event/event.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'calendar', component: CalendarComponent, canActivate: [isLoginGuard,isValidMailGuard] },
+    { path: 'calendar', component: CalendarComponent, canActivate: [isLoginGuard, isValidMailGuard] },
     { path: '', component: HomeComponent, canActivate: [isLoginGuard] },
-    {path:'events/:type' ,  component:EventsComponent, canActivate: [isLoginGuard,isValidMailGuard]},
+    { path: 'events/:type', component: EventsComponent, canActivate: [isLoginGuard, isValidMailGuard] },
     { path: 'verify', component: ValidateMailComponent, canActivate: [isLoginGuard] },
-    { path: 'event/:id', component: LogoutComponent },
+    { path: 'event/:id', component: EventComponent, canActivate: [isLoginGuard, isValidMailGuard] },
     { path: 'logout', component: LogoutComponent },
 
 ];

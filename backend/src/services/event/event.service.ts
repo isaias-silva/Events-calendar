@@ -75,19 +75,19 @@ export class EventService {
             throw err
         }
     }
-    async get(owner: string, isGlobal?: boolean, _id?: string) {
+    async get(user: string, isGlobal?: boolean, _id?: string) {
         try {
             if (_id) {
                 const eventDb = await this.eventModel.findOne({ _id })
                 if (!eventDb) {
                     throw new NotFoundException(Responses.EVENT_NOT_FOUND)
                 }
-                const { title, describ, initDate, endDate, background, isPrivate, isActive } = eventDb
+                const { title, describ, initDate, endDate, background, isPrivate, isActive, owner } = eventDb
                 const event = { title, describ, initDate, endDate, background, _id, owner, isPrivate, isActive }
                 return event
 
             } else {
-                const eventsDb = await this.eventModel.find(isGlobal ? null : { owner })
+                const eventsDb = await this.eventModel.find(isGlobal ? null : { owner: user })
                 return eventsDb.map(eventDb => {
                     const { title, describ, initDate, endDate, background, participants, isPrivate, _id, owner, isActive } = eventDb
                     const event = { title, describ, initDate, endDate, background, _id, participants, isPrivate, owner, isActive }
@@ -103,7 +103,7 @@ export class EventService {
     async getAllDoc(): Promise<EventDocument[]> {
         try {
 
-            const events = await this.eventModel.find({isActive:true})
+            const events = await this.eventModel.find({ isActive: true })
 
             return events
         } catch (err) {
@@ -163,7 +163,7 @@ export class EventService {
     }
     async invalidateEvent(_id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id,isActive:true })
+            const eventDb = await this.eventModel.findOne({ _id, isActive: true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -180,9 +180,9 @@ export class EventService {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
             const { participants } = eventDb
-           
+
             await this.eventModel.updateOne({ _id }, { usersNotify: true })
-           
+
             participants.forEach(async participant => {
                 const user = await this.userService.get(participant)
                 const body = this.mailService.generateMessage("event is today", user.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
@@ -196,7 +196,7 @@ export class EventService {
 
     async updateBackground(owner: string, domain: string, _id: string, file: Buffer) {
         try {
-            const exist = await this.exists({ owner, _id,isActive:true})
+            const exist = await this.exists({ owner, _id, isActive: true })
             if (!exist) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -391,7 +391,7 @@ export class EventService {
     async toInvite(owner: string, user: string, _id: string) {
         try {
 
-            const eventDb = await this.eventModel.findOne({ owner, _id ,isActive:true})
+            const eventDb = await this.eventModel.findOne({ owner, _id, isActive: true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -427,7 +427,7 @@ export class EventService {
 
     async respondToInvitation(user: string, _id: string, accept: boolean) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id ,isActive:true})
+            const eventDb = await this.eventModel.findOne({ _id, isActive: true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
