@@ -6,8 +6,10 @@
 
     </mat-card>
     <div class="block-buttons">
-        <button mat-button>meus eventos</button>
-        <button mat-button>eventos que participo</button>
+        <mat-radio-group  [(ngModel)]="type" (change)="updateEvents()" >
+            <mat-radio-button value="me" checked>Meus Eventos</mat-radio-button>
+            <mat-radio-button value="participant">Eventos que Participo</mat-radio-button>
+          </mat-radio-group>
     </div>
     <div class="info-block">
         <div class="block-note" *ngIf="eventsInDate.length>0">

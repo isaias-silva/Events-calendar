@@ -61,10 +61,20 @@
 .block-note ul {
   padding: 0;
   margin: 10px;
+  list-style: none;
+
+
 }
 
 .block-note li {
   margin-bottom: 10px;
+  ::before {
+    content: '\2022'; 
+    color: $link-color;
+    display: inline-block;
+    width: 1em; 
+    margin-left: -1em;
+  }
 }
 
 .void-block-note {
@@ -88,7 +98,7 @@
   justify-content: space-around;
   margin: 20px;
   background-color: #fff;
-  padding: 2px;
+  padding: 10px;
   border-radius: 5px;
 }
 

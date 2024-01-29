@@ -1,15 +1,24 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Event } from '../../../interfaces/event.interface';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-events-card',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './events-card.component.html',
   styleUrl: './events-card.component.scss'
 })
 export class EventsCardComponent implements OnInit {
- 
+
+  constructor(private router: Router) {
+
+  }
+
+  redirect() {
+    this.router.navigate([`event/${this.event?._id}`])
+  }
+
   ngOnInit(): void {
     if (this.event) {
       this.event.describ = this.resume(this.event.describ)
@@ -31,7 +40,7 @@ export class EventsCardComponent implements OnInit {
     return text
   }
   formatDateToString(dateString: string): string {
-    const data=new Date(dateString)
+    const data = new Date(dateString)
     const day = this.addZero(data.getDate());
     const month = this.addZero(data.getMonth() + 1);
     const year = data.getFullYear();

@@ -7,44 +7,52 @@ import { Event } from '../../../interfaces/event.interface';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss'],
-  imports: [MatCardModule, MatDatepickerModule, CommonModule,MatButtonModule,MatButtonToggleModule],
+  imports: [MatCardModule, MatDatepickerModule, CommonModule, MatRadioModule, FormsModule],
   providers: [EventsService],
   encapsulation: ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit {
 
 
-
-
   constructor(private eventService: EventsService) { }
-
-
-  ngAfterViewInit() {
-  }
 
   ngOnInit(): void {
 
-    if (this.type == "me")
+    this.updateEvents()
+
+
+  }
+
+
+  updateEvents() {
+    alert(this.type)
+    if (this.type == "me") {
+
       this.eventService.getEvents(this.type).subscribe(response => {
         this.myEvents = response;
         this.onSelectedDate(new Date())
       });
-
-
+    }else {
+      
+    }
   }
-
 
   myEvents: Event[] = [];
   eventsInDate: Event[] = [];
   selected: Date | DateRange<Date> | null = new Date();
-  type: "me" | "partipant"= "me"
+
+
+  @Input() type: "me" | "partipant" = "me"
+
+
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     if (view == 'month') {
       const eventInit = this.checkDateEvent(cellDate);
@@ -85,5 +93,6 @@ export class CalendarComponent implements OnInit {
       this.eventsInDate = this.getEventsInDate(event)
 
   }
+
 
 }

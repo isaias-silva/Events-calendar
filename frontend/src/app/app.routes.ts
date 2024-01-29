@@ -16,6 +16,7 @@ export const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [isLoginGuard] },
     {path:'events/:type' ,  component:EventsComponent, canActivate: [isLoginGuard,isValidMailGuard]},
     { path: 'verify', component: ValidateMailComponent, canActivate: [isLoginGuard] },
+    { path: 'event/:id', component: LogoutComponent },
     { path: 'logout', component: LogoutComponent },
 
 ];

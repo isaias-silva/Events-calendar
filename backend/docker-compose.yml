@@ -34,6 +34,8 @@ services:
 
     depends_on:
       - eventsmongo
+    volumes:
+      - ./public/temp:app/public/temp
 
 networks:
   eventsnetwork:
