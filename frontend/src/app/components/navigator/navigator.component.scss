@@ -33,7 +33,7 @@ nav {
         align-items: center;
         justify-content: space-around;
         padding: 10px;
-        transition: color 0.3s ease background-color 0.3s ease;
+        transition: all 0.3s ease;
         border-radius: 20px;
 
         &:hover {
@@ -53,23 +53,16 @@ nav {
 }
 
 .button-expand {
-  background-color: #00000068;
-  border: none;
 
-  border-radius: 100%;
   cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+  transition: all 0.3s ease,;
   position: fixed;
   z-index: 100000 !important;
-  width: 30px;
-  height: 30px;
+  
   top: 10px;
   left: 15px;
   opacity: 0.2;
+  text-align: center;
 
   &:hover {
     opacity: 1;

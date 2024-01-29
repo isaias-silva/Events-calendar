@@ -41,6 +41,9 @@ export class UserService {
   getUser() {
     return this.http.get<UserData>(`${this.apiUrl}/user/me`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
   }
+  validateMail(token: string) {
+    return this.http.get<GlobalResponse>(`${this.apiUrl}/user/validate?token=${token}`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
+  }
   updateName(name: string) {
     return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update`, { name }, { headers: { "authorization": `Bearer ${this.getToken()}` } })
 
@@ -50,7 +53,7 @@ export class UserService {
 
     formData.append("file", file);
 
-    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`,formData, { headers: { "authorization": `Bearer ${this.getToken()}`  }})
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`, formData, { headers: { "authorization": `Bearer ${this.getToken()}` } })
   }
 
 

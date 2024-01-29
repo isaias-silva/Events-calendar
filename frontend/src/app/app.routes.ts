@@ -7,6 +7,7 @@ import { isLoginGuard } from './guards/is-login.guard';
 import { LogoutComponent } from './pages/logout/logout.component';
 import { isValidMailGuard } from './guards/is-valid-mail.guard';
 import { EventsComponent } from './pages/events/events.component';
+import { ValidateMailComponent } from './pages/validate-mail/validate-mail.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -14,7 +15,7 @@ export const routes: Routes = [
     { path: 'calendar', component: CalendarComponent, canActivate: [isLoginGuard,isValidMailGuard] },
     { path: '', component: HomeComponent, canActivate: [isLoginGuard] },
     {path:'events/:type' ,  component:EventsComponent, canActivate: [isLoginGuard,isValidMailGuard]},
-    
+    { path: 'verify', component: ValidateMailComponent, canActivate: [isLoginGuard] },
     { path: 'logout', component: LogoutComponent },
 
 ];

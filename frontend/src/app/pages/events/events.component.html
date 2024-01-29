@@ -1,5 +1,9 @@
 <div class="events-container">
     <h2>{{title}}</h2>
+
+    <div *ngIf="events.length<1" class="void">
+        <p>não há eventos aqui.</p>
+        </div>
     <button *ngIf="filter=='me'" class="create-event" (click)="openDialogCreate()">criar novo evento</button>
     <div class="block-events">
         <app-events-card *ngFor="let event of events" [event]="event"/>

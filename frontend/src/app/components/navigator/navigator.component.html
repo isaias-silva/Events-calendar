@@ -1,6 +1,6 @@
 <div *ngIf="visible"> 
-  <button class="button-expand" (click)="changeVisibile()" >
-    <mat-icon>{{max?'keyboard_arrow_right':'keyboard_arrow_left'}}</mat-icon>
+  <button mat-mini-fab class="button-expand" (click)="changeVisibile()" >
+    <mat-icon>{{max?'close':'menu'}}</mat-icon>
   </button>
 
 <nav [class.max]="max" [class.min]="!max">
