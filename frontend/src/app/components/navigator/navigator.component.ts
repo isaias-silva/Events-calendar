@@ -2,21 +2,27 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [MatIconModule,CommonModule],
+  imports: [MatIconModule,CommonModule,RouterModule],
   providers: [UserService],
   templateUrl: './navigator.component.html',
   styleUrl: './navigator.component.scss'
 })
 export class NavigatorComponent implements OnInit {
-  constructor(private userServices:UserService){}
+  constructor(private userServices:UserService, private router:Router){}
   ngOnInit(): void {
     this.visible=this.userServices.getToken()?true:false
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.visible = this.userServices.getToken() ? true : false;
+      }
+    });
   }
 
   max: boolean = false

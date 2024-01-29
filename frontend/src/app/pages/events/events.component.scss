@@ -1,16 +1,22 @@
 @import "../../../styles.scss";
 .events-container{
     width: 90%;
-    margin-left: 10%;
+    margin-left: 7%;
    
-    h2{
-        font-weight: bold;
-    }
+  
 }
 .create-event{
     padding: 20px;
-    font-size: 16px;
+    font-size: 12px;
     position: absolute;
     top:0;
     right: 0;
+}
+.block-events{
+  margin-top: 50px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }

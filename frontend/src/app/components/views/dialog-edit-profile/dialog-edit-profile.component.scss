@@ -16,8 +16,11 @@
     margin-top: 10px;
     height: 40px;
   }
+  
 }
-
+::ng-deep .cdk-overlay-dark-backdrop {
+  background-color: rgba(0, 0, 0, 0.854); 
+}
 @media screen and (max-width: 764px) {
   .dialog-edit {
     width: 200px;

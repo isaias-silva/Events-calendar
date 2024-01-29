@@ -16,8 +16,7 @@ export class ProfileComponent {
   imageUpload: string | undefined;
 
   constructor(private userService: UserService) { }
-
-  async changeImage(event: any) {
+ changeImage(event: any) {
     console.log(event.target.files[0])
     if (event.target.files && event.target.files[0]) {
       if (event.target.files[0].type.includes("image") == false) {
@@ -27,7 +26,7 @@ export class ProfileComponent {
         this.image = "../../../assets/corrupted.png"
       } else {
         this.image = URL.createObjectURL(event.target.files[0]);
-       this.userService.updateProfileUser(event.target.files[0].arrayBuffer()).subscribe((response)=>{
+       this.userService.updateProfileUser(event.target.files[0]).subscribe((response)=>{
         console.log(response)
        })
       }

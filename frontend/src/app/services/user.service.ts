@@ -45,9 +45,12 @@ export class UserService {
     return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update`, { name }, { headers: { "authorization": `Bearer ${this.getToken()}` } })
 
   }
-  updateProfileUser(file: ArrayBuffer) {
+  updateProfileUser(file: File) {
+    const formData = new FormData();
 
-    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`, {file}, { headers: { "authorization": `Bearer ${this.getToken()}`  }})
+    formData.append("file", file);
+
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/user/update/profile`,formData, { headers: { "authorization": `Bearer ${this.getToken()}`  }})
   }
 
 

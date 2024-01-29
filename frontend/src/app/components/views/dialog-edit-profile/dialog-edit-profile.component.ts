@@ -14,7 +14,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 export class DialogEditProfileComponent {
   form = new FormGroup(
     {
-      name: new FormControl<string | null>(null, Validators.required)
+      name: new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)])
     }
   )
   constructor(private userService: UserService, public dialogRef: MatDialogRef<DialogEditProfileComponent>) { }
