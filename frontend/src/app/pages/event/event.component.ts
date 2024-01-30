@@ -11,6 +11,9 @@ import { CommonModule } from '@angular/common';
 import { UserData } from '../../../interfaces/user.data.interface';
 import { MatTableModule } from '@angular/material/table';
 import { CreateEventComponent } from '../../components/views/create-event/create-event.component';
+import { DialogGlobalComponent } from '../../components/views/dialog-global/dialog-global.componen';
+import { UpdateEventComponent } from '../../components/views/update-event/update-event.component';
+import { EventCreate } from '../../../interfaces/event.create.interface';
 @Component({
   selector: 'app-event',
   standalone: true,
@@ -18,7 +21,7 @@ import { CreateEventComponent } from '../../components/views/create-event/create
   providers: [EventsService, UserService],
   templateUrl: './event.component.html',
   styleUrl: './event.component.scss'
-  
+
 })
 export class EventComponent implements OnInit {
   constructor(private router: Router,
@@ -127,17 +130,20 @@ export class EventComponent implements OnInit {
     }
   }
 
-  openEditorModal(){
-    
-    const dialogRef = this.dialog.open(CreateEventComponent, {
-  
+  openEditorModal() {
 
+    const dialogRef = this.dialog.open(UpdateEventComponent, {
+      height: '100%',
+      width: '700px',
+      data: this.event
     });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.eventsService.createEvent(result).subscribe((response) => {
+    dialogRef.afterClosed().subscribe((result: EventCreate) => {
+      if (result && this.event) {
+        this.eventsService.eventUpdate(this.event._id, result).subscribe((response) => {
           console.log(response)
-         
+          this.updateEvent()
+        }, (err) => {
+          console.log(err)
         })
       }
     });

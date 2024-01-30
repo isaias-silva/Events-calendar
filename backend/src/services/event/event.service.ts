@@ -113,7 +113,7 @@ export class EventService {
     }
     async update(owner: string, _id: string, event: EventUpdateDto) {
         try {
-            const { title, initString, endString, describ } = event
+            const { title, initString, endString, describ, isPrivate } = event
 
             const eventExists = await this.exists({ _id, owner })
 
@@ -122,7 +122,7 @@ export class EventService {
             }
 
 
-            const eventSameCount = await this.getCount({ title, owner })
+            const eventSameCount = await this.getCount({ $and: [{ title, owner }, { _id: { $ne: _id } }] })
 
 
 
@@ -136,16 +136,19 @@ export class EventService {
                 updateObject.describ = describ;
             }
 
-            if (endString) {
-                updateObject.initDate = new Date(endString);
+            if (initString) {
+                updateObject.initDate = new Date(initString);
             }
 
-            if (initString) {
-                updateObject.endDate = new Date(initString);
+            if (endString) {
+                updateObject.endDate = new Date(endString);
             }
             if (describ) {
                 updateObject.describ = describ
 
+            }
+            if (isPrivate != undefined && isPrivate != null) {
+                updateObject.isPrivate = isPrivate
             }
 
             console.log(updateObject)

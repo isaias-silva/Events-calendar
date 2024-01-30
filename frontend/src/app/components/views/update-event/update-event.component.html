@@ -1,0 +1,58 @@
+<div class="dialog-container">
+
+    <h1 mat-dialog-title>Criar Evento</h1>
+    <div mat-dialog-content>
+        <form [formGroup]="eventForm">
+
+
+            <mat-form-field>
+                <mat-label>Título</mat-label>
+
+                <input matInput placeholder="Título do evento" formControlName="title" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Descrição</mat-label>
+                <textarea matInput placeholder="Descrição do evento" formControlName="description" required></textarea>
+            </mat-form-field>
+
+            <div class="block-date">
+                <mat-form-field>
+                    <mat-label>Data de início do evento</mat-label>
+                    <input matInput [matDatepicker]="initDatePicker" placeholder="Data" formControlName="initDate"
+                        required>
+                    <mat-datepicker-toggle matSuffix [for]="initDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #initDatePicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Horário de início</mat-label>
+                    <input matInput type="time" formControlName="initTime">
+                </mat-form-field>
+            </div>
+            <div class="block-date">
+                <mat-form-field>
+                    <mat-label>Data de término</mat-label>
+                    <input matInput [matDatepicker]="endDatePicker" placeholder="Data" formControlName="endDate"
+                        required>
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Horário de término</mat-label>
+                    <input matInput type="time" formControlName="endTime">
+                </mat-form-field>
+            </div>
+
+
+            <div class="block-priv">
+                <mat-checkbox formControlName="isPrivate">Privado</mat-checkbox>
+            </div>
+
+           
+        </form>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button (click)="onCancel()">Cancelar</button>
+        <button mat-button (click)="onSave()">Salvar</button>
+    </div>
+</div>

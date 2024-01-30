@@ -20,7 +20,7 @@ export class EventsService {
     return this.http.get<Event[]>(`${this.apiUrl}/events/${type}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
   }
 
-  getEvent(id:string){
+  getEvent(id: string) {
     return this.http.get<Event>(`${this.apiUrl}/events/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
@@ -28,16 +28,21 @@ export class EventsService {
     return this.http.post<GlobalResponse>(`${this.apiUrl}/events/create`, event, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
-  getParticipants(id:string){
+  getParticipants(id: string) {
     return this.http.get<UserData[]>(`${this.apiUrl}/events/participants/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
-  getApplicants(id:string){
+  getApplicants(id: string) {
     return this.http.get<UserData[]>(`${this.apiUrl}/events/applicants/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
-  getGuests(id:string){
+  getGuests(id: string) {
     return this.http.get<UserData[]>(`${this.apiUrl}/events/guests/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
+  eventUpdate(id: string, event: EventCreate) {
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/events/update/${id}`, event, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+
 }
