@@ -194,7 +194,6 @@ export class EventController {
 
     async updateProfile(@Req() req: Request, @Param('id') id: string, @UploadedFile(new ParseFilePipe({
         validators: [
-            new MaxFileSizeValidator({ maxSize: 100000 }),
             new FileTypeValidator({ fileType: 'image' }),
 
         ],

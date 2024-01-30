@@ -122,7 +122,6 @@ export class UserController {
 
     async updateProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
         validators: [
-            new MaxFileSizeValidator({ maxSize: 100000 }),
             new FileTypeValidator({ fileType: 'image' }),
 
         ],

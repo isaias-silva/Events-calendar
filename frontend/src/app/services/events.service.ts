@@ -44,5 +44,12 @@ export class EventsService {
     return this.http.put<GlobalResponse>(`${this.apiUrl}/events/update/${id}`, event, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
+  eventUpdateBackground(id: string, file: File) {
+    const formData = new FormData();
 
+    formData.append("file", file);
+
+    return this.http.put<GlobalResponse>(`${this.apiUrl}/events/update/background/${id}`, formData, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
 }

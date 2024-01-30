@@ -42,6 +42,8 @@ export class EventComponent implements OnInit {
   applicants: UserData[] = []
   guests: UserData[] = []
 
+  backgroundUpload: string | undefined
+
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
 
@@ -161,4 +163,24 @@ export class EventComponent implements OnInit {
   addZero(numberDate: number): string {
     return numberDate < 10 ? `0${numberDate}` : `${numberDate}`;
   }
+
+  changeImage(event: any) {
+    console.log(event.target.files[0])
+    if (event.target.files && event.target.files[0]) {
+      if (event.target.files[0].type.includes("image") == false) {
+
+        return
+      } else {
+        this.backgroundUpload = URL.createObjectURL(event.target.files[0]);
+        if (this.event)
+          this.eventsService.eventUpdateBackground(this.event._id, event.target.files[0]).subscribe((response) => {
+            console.log(response)
+            this.updateEvent()
+          })
+      }
+
+    }
+
+  }
+
 }

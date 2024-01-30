@@ -3,7 +3,12 @@
     Editar
   </button>
 
-  <div class="background" [style.background]="event?.background || '#007bff'">
+  <div class="background" [style.backgroundImage]="'url('+(event?.background?event?.background :backgroundUpload) +')'">
+    <div class="maskIsme" *ngIf="isMe">
+
+      <input type="file" id="background" (change)="changeImage($event)">
+      <label for="background"></label>
+    </div>
 
     <i class="material-icons">event</i>
   </div>
