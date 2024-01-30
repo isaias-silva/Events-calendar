@@ -24,20 +24,24 @@ export class VerifyValidEventJob {
     }
     private async treatEvent(event: EventDocument) {
         try {
-            if(event.usersNotify){
-                return
-            }
-            this.logger.verbose(`check whether event "${event.title}" participants have already been notified`)
+
+          
             const { initDate, endDate } = event
             const nowDate = new Date()
 
             if (nowDate > endDate) {
+                this.logger.verbose(`invalidate event ${event.title}`)
 
-                await this.eventService.invalidateEvent(event.id)
+                await this.eventService.invalidateEvent(event._id.toString())
             }
 
-            if ((nowDate.getDay() == initDate.getDay())) {
 
+            if ((nowDate.getFullYear() == initDate.getFullYear()) && (nowDate.getMonth() == initDate.getMonth()) && (nowDate.getDay() == initDate.getDay())) {
+                if (event.usersNotify) {
+                    return
+                }
+                this.logger.verbose(`check whether event "${event.title}" participants have already been notified`)
+                
                 await this.eventService.sendNotify(event.id)
             }
 

@@ -7,6 +7,7 @@ import { EventsCardComponent } from "../../components/events-card/events-card.co
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CreateEventComponent } from '../../components/views/create-event/create-event.component';
 import { EventCreate } from '../../../interfaces/event.create.interface';
+import swal from 'sweetalert2';
 @Component({
   selector: 'app-events',
   standalone: true,

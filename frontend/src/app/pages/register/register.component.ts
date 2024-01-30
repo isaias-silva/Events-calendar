@@ -7,7 +7,7 @@ import { Router, RouterModule } from '@angular/router';
 import { DialogModule } from '@angular/cdk/dialog';
 import { DialogGlobalComponent } from '../../components/views/dialog-global/dialog-global.componen';
 import { HttpErrorResponse } from '@angular/common/http';
-
+import swal from "sweetalert2"
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -39,27 +39,34 @@ export class RegisterComponent {
     const { name, mail, password } = this.form.value
     if (name && mail && password)
       this.userService.register(name, mail, password).subscribe((response) => {
-        this.openDialogLogin(response.message, true)
+        swal.fire({
+
+          text: response.message,
+          showCloseButton: false,
+          showConfirmButton: false,
+          icon: 'success'
+        }).then((result) => {
+          this.router.navigate(['/'])
+        })
+
       }, (responseError: HttpErrorResponse) => {
 
         const { error } = responseError
         if (error.message) {
-          this.openDialogLogin(error.message, false)
+          swal.fire({
+
+            text: error.message,
+            showCloseButton: false,
+            showConfirmButton: false,
+            icon: 'error'
+          }).then((result) => {
+            this.router.navigate(['/'])
+          })
         }
 
       })
 
 
   }
-  openDialogLogin(message: string, success: boolean): void {
 
-    const dialogRef = this.dialog.open(DialogGlobalComponent, {
-      data: { message }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (success)
-        this.router.navigate(['/'])
-    });
-  }
 }

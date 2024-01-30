@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup,ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import {DialogGlobalComponent } from '../../components/views/dialog-global/dialog-global.componen';
 import { Router } from '@angular/router';
-
+import swal from 'sweetalert2';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HttpClientModule, ReactiveFormsModule, MatDialogModule],
+  imports: [HttpClientModule, ReactiveFormsModule, MatDialogModule, ],
   providers: [UserService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -23,7 +22,7 @@ export class LoginComponent {
     password: new FormControl<string | null>(null, Validators.required)
   })
 
-  constructor(private userService: UserService, public dialog: MatDialog, private router: Router) { }
+  constructor(private userService: UserService, private router: Router) { }
   submitForm() {
     if (this.form.invalid) {
       return
@@ -34,27 +33,30 @@ export class LoginComponent {
     if (mail && password)
       this.userService.login(mail, password).subscribe((response) => {
 
-        this.openDialogLogin(response.message, true)
+        swal.fire({
+
+          text: response.message,
+          showCloseButton: false,
+          showConfirmButton: false,
+          icon: 'success'
+        }).then((result) => {
+          this.router.navigate(['/'])
+        })
       }, (responseError: HttpErrorResponse) => {
 
         const { error } = responseError
         if (error.message) {
-          this.openDialogLogin(error.message, false)
+          swal.fire({
+
+            text: error.message,
+            showCloseButton: false,
+            showConfirmButton: false,
+            icon: 'error'
+          })
         }
-       
+
       })
   }
 
 
-  openDialogLogin(message: string, success: boolean): void {
-
-    const dialogRef = this.dialog.open(DialogGlobalComponent, {
-      data: { message }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (success)
-        this.router.navigate(['/'])
-    });
-  }
 }

@@ -67,7 +67,7 @@ export class EventComponent implements OnInit {
         console.log(event)
         this.setStringDates()
         this.setIsMe()
-        this.setParticipants()
+
 
       }, (error) => {
         console.log(error)
@@ -78,7 +78,7 @@ export class EventComponent implements OnInit {
         this.event = event
         this.setStringDates()
         this.setIsMe()
-        this.setParticipants()
+
       })
     }
   }
@@ -95,7 +95,9 @@ export class EventComponent implements OnInit {
       console.log(response)
       this.isMe = response._id == this.event?.owner
       if (this.isMe) {
-
+        this.setApplicants()
+        this.setParticipants()
+        this.setGuests()
       }
     })
   }
@@ -172,11 +174,14 @@ export class EventComponent implements OnInit {
         return
       } else {
         this.backgroundUpload = URL.createObjectURL(event.target.files[0]);
-        if (this.event)
+        console.log(this.backgroundUpload)
+        if (this.event) {
+
           this.eventsService.eventUpdateBackground(this.event._id, event.target.files[0]).subscribe((response) => {
             console.log(response)
             this.updateEvent()
           })
+        }
       }
 
     }

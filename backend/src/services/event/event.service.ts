@@ -78,7 +78,7 @@ export class EventService {
     async get(user: string, isGlobal?: boolean, _id?: string) {
         try {
             if (_id) {
-                const eventDb = await this.eventModel.findOne({ _id })
+                const eventDb = await this.eventModel.findOne({ _id, isActive: true })
                 if (!eventDb) {
                     throw new NotFoundException(Responses.EVENT_NOT_FOUND)
                 }
@@ -87,7 +87,7 @@ export class EventService {
                 return event
 
             } else {
-                const eventsDb = await this.eventModel.find(isGlobal ? null : { owner: user })
+                const eventsDb = await this.eventModel.find(isGlobal ? { isActive: true } : { owner: user, isActive: true })
                 return eventsDb.map(eventDb => {
                     const { title, describ, initDate, endDate, background, participants, isPrivate, _id, owner, isActive } = eventDb
                     const event = { title, describ, initDate, endDate, background, _id, participants, isPrivate, owner, isActive }
@@ -166,7 +166,7 @@ export class EventService {
     }
     async invalidateEvent(_id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id, isActive: true })
+            const eventDb = await this.eventModel.findOne({ _id })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -178,7 +178,7 @@ export class EventService {
     }
     async sendNotify(_id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id })
+            const eventDb = await this.eventModel.findOne({ _id ,isActive:true})
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -188,7 +188,9 @@ export class EventService {
 
             participants.forEach(async participant => {
                 const user = await this.userService.get(participant)
+                
                 const body = this.mailService.generateMessage("event is today", user.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+               
                 await this.mailService.sendMail(user.mail, "É hoje!!!", body)
             })
 

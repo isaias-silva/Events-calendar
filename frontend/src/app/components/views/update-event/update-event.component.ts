@@ -53,6 +53,7 @@ export class UpdateEventComponent {
       const endDateObject: Date = this.makeDate(this.eventForm.get("endDate")?.value, this.eventForm.get("endTime")?.value)
 
       if (!this.validTime(initDateObject, endDateObject)) {
+      
 
         return
       }

@@ -1,16 +1,23 @@
 <div class="event-card">
-  <button mat-button class="edit-button" *ngIf="isMe==true" (click)="openEditorModal()">
-    Editar
-  </button>
+  <div class="control" *ngIf="isMe==true">
+    <button mat-button (click)="openEditorModal()">
+      Editar
+    </button>
+    <button mat-button  color="warn" >
+      Encerrar evento
+    </button>
 
-  <div class="background" [style.backgroundImage]="'url('+(event?.background?event?.background :backgroundUpload) +')'">
+  </div>
+
+  <div class="background"
+    [style.backgroundImage]="'url('+(backgroundUpload?backgroundUpload : event?.background ) +')'">
     <div class="maskIsme" *ngIf="isMe">
 
       <input type="file" id="background" (change)="changeImage($event)">
       <label for="background"></label>
     </div>
 
-    <i class="material-icons">event</i>
+    <i class="material-icons" *ngIf="!event?.background">event</i>
   </div>
 
   <div class="event-details">
