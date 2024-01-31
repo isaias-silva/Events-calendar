@@ -33,20 +33,26 @@ export class CalendarComponent implements OnInit {
 
 
   updateEvents() {
-    
+    this.myEvents = []
     if (this.type == "me") {
+
 
       this.eventService.getEvents(this.type).subscribe(response => {
         this.myEvents = response;
         this.onSelectedDate(new Date())
       });
-    }else {
-      
+    } else {
+      this.eventService.getEventWhere('participate').subscribe(response => {
+        this.myEvents = response;
+        this.onSelectedDate(new Date())
+      });
     }
   }
 
   myEvents: Event[] = [];
+
   eventsInDate: Event[] = [];
+
   selected: Date | DateRange<Date> | null = new Date();
 
 
@@ -67,25 +73,31 @@ export class CalendarComponent implements OnInit {
 
   checkDateEvent(date: Date): Event | undefined {
     return this.myEvents.find((event) => {
-      const dateEvent = new Date(event.initDate);
+      const initDate = new Date(event.initDate);
+      const endDate = new Date(event.endDate);
 
-      return (
-        dateEvent.getFullYear() === date.getFullYear() &&
-        dateEvent.getMonth() === date.getMonth() &&
-        dateEvent.getDate() === date.getDate()
-      );
+      initDate.setHours(0)
+      initDate.setMinutes(0)
+      date.setHours(0)
+      date.setMinutes(0)
+
+      return (date.getTime() == initDate.getTime()) || (date >= initDate && date <= endDate);
     });
   }
 
   getEventsInDate(date: Date): Event[] {
     return this.myEvents.filter((event) => {
-      const dateEvent = new Date(event.initDate);
 
-      return (
-        dateEvent.getFullYear() === date.getFullYear() &&
-        dateEvent.getMonth() === date.getMonth() &&
-        dateEvent.getDate() === date.getDate()
-      );
+
+      const initDate = new Date(event.initDate);
+      const endDate = new Date(event.endDate);
+
+      initDate.setHours(0)
+      initDate.setMinutes(0)
+      date.setHours(0)
+      date.setMinutes(0)
+
+      return (date.getTime() == initDate.getTime()) || (date >= initDate && date <= endDate);
     });
   }
   onSelectedDate(event: Date | null) {

@@ -1,10 +1,13 @@
 <div class="box">
-   
-    <mat-card class="demo-inline-calendar-card" *ngIf="myEvents.length>0">
-        <mat-calendar [(selected)]="selected" [dateClass]="dateClass"
-            (selectedChange)="onSelectedDate($event)"></mat-calendar>
+    <div class="block-calendar">
+    
+        <mat-card class="demo-inline-calendar-card" *ngIf="myEvents.length>0">
+            <mat-calendar [(selected)]="selected" [dateClass]="dateClass"
+                (selectedChange)="onSelectedDate($event)"></mat-calendar>
+    
+        </mat-card>
+    </div>
 
-    </mat-card>
     <div class="block-buttons">
         <mat-radio-group  [(ngModel)]="type" (change)="updateEvents()" >
             <mat-radio-button value="me" checked>Meus Eventos</mat-radio-button>

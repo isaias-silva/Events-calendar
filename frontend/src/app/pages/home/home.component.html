@@ -1,5 +1,5 @@
 <div class="box">
-   
+
 
     <div class="profile-container">
         <button class="edit-button" (click)="openDialogEdit()"><mat-icon>edit</mat-icon></button>
@@ -19,13 +19,12 @@
 
         <div class="section">
             <h2>Convites:</h2>
-
             <ul>
-                <li>Evento 1</li>
-                <li>Evento 2</li>
-                <li>Evento 3</li>
+                <li *ngFor="let event of eventsWhereImGuest"><a [href]="'/event/'+event._id">{{event.title}}</a></li>
             </ul>
-            <a href="/invites">ir para</a>
+            <div *ngIf="eventsWhereImGuest.length<1" class="info">
+                Não há eventos nessa categoria.
+            </div>
         </div>
 
 
@@ -33,23 +32,24 @@
             <h2>Aguardando aprovação:</h2>
 
             <ul>
-                <li>Evento 4</li>
-                <li>Evento 5</li>
-                <li>Evento 6</li>
+                <li *ngFor="let event of eventsWhereImApplicant"><a [href]="'event/'+event._id">{{event.title}}</a>
+                </li>
             </ul>
-            <a href="/applicant">ir para</a>
-
+            <div *ngIf="eventsWhereImApplicant.length<1" class="info">
+                Não há eventos nessa categoria.
+            </div>
         </div>
 
         <div class="section">
-            <h2>participando</h2>
+            <h2>Participando</h2>
 
             <ul>
-                <li>Evento 4</li>
-                <li>Evento 5</li>
-                <li>Evento 6</li>
+                <li *ngFor="let event of eventsWhereImParticipant"><a [href]="'/event/'+event._id">{{event.title}}</a>
+                </li>
             </ul>
-            <a href="/participant">ir para</a>
+            <div *ngIf="eventsWhereImParticipant.length<1" class="info">
+                Não há eventos nessa categoria.
+            </div>
         </div>
 
     </div>
