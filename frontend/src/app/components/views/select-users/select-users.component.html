@@ -1,0 +1,14 @@
+<div class="box">
+    <input class="search" placeholder="pesquisar usuários" (input)="changeFilter($event)">
+    <div class="container" *ngFor="let user of users">
+        <img [src]="user.profile || '../../../../assets/profile.jpg'" />
+        <div class="content">
+            <h4>{{user.name}}</h4>
+            <span>{{user.mail}}</span>
+        </div>
+        <div class="control-user">
+
+            <button mat-raised-button color="primary" (click)="invite(user._id)">Convidar</button>
+        </div>
+    </div>
+</div>

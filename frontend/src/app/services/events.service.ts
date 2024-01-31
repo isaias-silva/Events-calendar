@@ -77,4 +77,13 @@ export class EventsService {
     return this.http.post<GlobalResponse>(`${this.apiUrl}/events/reject`, { _id, user }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
+  sendInvite(_id: string, user: string) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/send/invite`, { _id, user }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+  acceptInvite(_id: string, accept: boolean) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/accept/invite`, { _id, accept }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+
 }

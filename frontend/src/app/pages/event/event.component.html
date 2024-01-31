@@ -46,14 +46,23 @@
           imParticipant ? 'se desinscrever' :
           imGuest ? 'aceitar' :
           'participar'}}</button>
-        <div class="two-control" *ngIf="isMe">
+       
+       <button (click)="recuse()" mat-button class="recuse" *ngIf="imGuest">recusar</button>
+      
+       <div class="two-control" *ngIf="isMe">
           <button mat-button (click)="openList('participant')">Participantes</button>
-          
+
           <button mat-button (click)="openList('applicant')">Solicitações</button>
 
         </div>
+        <div class="adinfo" *ngIf="imApplicant">
+          <p>o organizador do evento já foi notificado para aprovar sua participação.</p>
 
-        <p *ngIf="imApplicant">o organizador do evento já foi notificado para aprovar sua participação.</p>
+        </div>
+        <div class="adinfo" *ngIf="imGuest">
+          <p>Você foi convidado para participar desse evento.</p>
+
+        </div>
       </div>
     </div>
   </div>

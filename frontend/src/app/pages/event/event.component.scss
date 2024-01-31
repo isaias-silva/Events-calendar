@@ -97,6 +97,25 @@ li {
     margin:2px;
   }
 }
+.recuse{
+  
+  margin-left: 10px;
+}
+
+.adinfo {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px; 
+  border-radius: 4px; 
+  
+  margin-top: 10px;
+}
+
+.adinfo p {
+  margin: 0; 
+  font-weight: bold;
+}
 @media only screen and (max-width: 600px) {
   .event-card {
     width: 100%;
@@ -117,5 +136,8 @@ li {
     display: flex;
     justify-content: space-between;
     width: 100%;
+  }
+  .adinfo {
+    padding: 2px;
   }
 }

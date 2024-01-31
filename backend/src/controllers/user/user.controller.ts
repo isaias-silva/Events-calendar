@@ -25,11 +25,11 @@ export class UserController {
     constructor(private readonly userService: UserService) { }
 
     @Post('subscribe')
-   
+
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 400, description: 'error in body of request' })
     @ApiResponse({ status: 201, description: 'successful subscription' })
-    
+
     async subscribeUser(@Body() body: UserSubscribeDto) {
 
         return await this.userService.subscribe(body.name, body.mail, body.password)
@@ -54,7 +54,7 @@ export class UserController {
     @ApiResponse({ status: 200, description: 'user info' })
     @ApiResponse({ status: 404, description: 'user not found' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
-   
+
     async getMe(@Req() req: Request) {
         return await this.userService.get(req["user"]._id);
 
@@ -67,22 +67,22 @@ export class UserController {
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 200, description: 'all users ' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
-   
+
     async getAll(@Req() req: Request) {
-        return await this.userService.getAllUsers()
+        return await this.userService.getAllUsers(req["user"]._id)
 
     }
 
     @ApiBearerAuth()
     @Get('validate')
     @UseGuards(JwtGuard)
-   
+
     @ApiResponse({ status: 200, description: 'user email validated' })
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
     @ApiResponse({ status: 401, description: 'validate code incorrect' })
     @ApiResponse({ status: 404, description: 'user not found' })
-   
+
 
     async validateMail(@Req() req: Request, @Query('token') token: string) {
         return await this.userService.validateMail(req["user"]._id, token)
@@ -92,13 +92,13 @@ export class UserController {
     @ApiBearerAuth()
     @Put('update')
     @UseGuards(JwtGuard)
-    
+
     @ApiResponse({ status: 200, description: 'user updated' })
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
-    @ApiResponse({ status: 400, description:  'error in body of request' })
+    @ApiResponse({ status: 400, description: 'error in body of request' })
     @ApiResponse({ status: 404, description: 'user not found' })
-   
+
     async updateInfo(@Req() req: Request, @Body() body: UserUpdateDto) {
 
 
@@ -115,9 +115,9 @@ export class UserController {
     @ApiResponse({ status: 200, description: 'user profile updated' })
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
-    @ApiResponse({ status: 400, description:  'error in body of request' })
+    @ApiResponse({ status: 400, description: 'error in body of request' })
     @ApiResponse({ status: 404, description: 'user not found' })
-   
+
 
 
     async updateProfile(@Req() req: Request, @UploadedFile(new ParseFilePipe({
@@ -140,7 +140,7 @@ export class UserController {
     @ApiResponse({ status: 500, description: 'internal error in application' })
     @ApiResponse({ status: 401, description: 'access token not found or invalid' })
     @ApiResponse({ status: 404, description: 'user not found' })
-   
+
     async deleteUser(@Req() req: Request) {
         return await this.userService.delete(req["user"]._id)
     }

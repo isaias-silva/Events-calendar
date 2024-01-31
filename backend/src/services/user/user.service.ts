@@ -104,7 +104,7 @@ export class UserService {
             }
             const { name, profile, mail, mailVerify } = user
 
-            return { name, profile, mail, mailVerify, _id}
+            return { name, profile, mail, mailVerify, _id }
         }
         catch (err) {
             Logger.error(err, 'User Service')
@@ -112,9 +112,9 @@ export class UserService {
         }
     }
 
-    async getAllUsers() {
+    async getAllUsers(user: string) {
         try {
-            const userAll = await this.userModel.find({ mailVerify: true })
+            const userAll = await this.userModel.find({ mailVerify: true, _id: { $ne: user } })
 
             const usersFormat = userAll.map(user => {
                 const { name, profile, mail, _id } = user
@@ -156,7 +156,7 @@ export class UserService {
             if (name) {
                 updatedInfo.name = name
             }
-        
+
             await this.userModel.updateOne({ _id }, updatedInfo)
             return { message: Responses.USER_UPDATED }
 

@@ -14,6 +14,7 @@ import { UpdateEventComponent } from '../../components/views/update-event/update
 import { EventCreate } from '../../../interfaces/event.create.interface';
 import swal from 'sweetalert2';
 import { UserListComponent } from '../../components/views/user-list/user-list.component';
+import { SelectUsersComponent } from '../../components/views/select-users/select-users.component';
 
 @Component({
   selector: 'app-event',
@@ -25,6 +26,7 @@ import { UserListComponent } from '../../components/views/user-list/user-list.co
 
 })
 export class EventComponent implements OnInit {
+
 
   constructor(private router: Router,
     public dialog: MatDialog,
@@ -241,10 +243,13 @@ export class EventComponent implements OnInit {
       return
     }
     if (this.isMe) {
-      return
+      return this.openListGuest()
     }
 
     if (this.imGuest) {
+      this.eventsService.acceptInvite(this.event._id, true).subscribe((res) => {
+        location.reload()
+      })
       return
     }
 
@@ -252,6 +257,7 @@ export class EventComponent implements OnInit {
       this.eventsService.unsubscribeEvent(this.event._id).subscribe(() => {
         this.updateEvent()
       })
+
     } else {
       this.eventsService.subscribeEvent(this.event._id).subscribe(() => {
         this.updateEvent()
@@ -260,15 +266,41 @@ export class EventComponent implements OnInit {
 
   }
 
+
+  recuse() {
+
+    if (this.imGuest && this.event) {
+
+      this.eventsService.acceptInvite(this.event._id, false).subscribe((res) => {
+        location.reload()
+      })
+    }
+  }
   openList(type: 'participant' | 'applicant') {
     const dialog = this.dialog.open(UserListComponent, {
       data: { _id: this.event?._id, type, users: type == 'participant' ? this.participants : this.applicants },
       maxHeight: '100%',
-      minHeight:'200px',
+      minHeight: '200px',
       width: '700px',
     })
 
     dialog.afterClosed().subscribe((update: boolean) => {
+      if (update == true) {
+        this.updateEvent()
+      }
+    })
+  }
+  openListGuest() {
+    if (!this.isMe) {
+      return
+    }
+    const dialog = this.dialog.open(SelectUsersComponent, {
+      maxHeight: '100%',
+      minHeight: '200px',
+      width: '700px',
+      data: { _id: this.event?._id }
+    })
+    dialog.afterClosed().subscribe((update) => {
       if (update == true) {
         this.updateEvent()
       }

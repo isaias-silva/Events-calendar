@@ -41,6 +41,9 @@ export class UserService {
   getUser() {
     return this.http.get<UserData>(`${this.apiUrl}/user/me`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
   }
+  getAll() {
+    return this.http.get<UserData[]>(`${this.apiUrl}/user/all`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
+  }
   validateMail(token: string) {
     return this.http.get<GlobalResponse>(`${this.apiUrl}/user/validate?token=${token}`, { headers: { "authorization": `Bearer ${this.getToken()}` } })
   }
