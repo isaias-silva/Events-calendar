@@ -66,8 +66,21 @@ export class EventController {
 
 
     async approveInEvent(@Req() req: Request, @Body() data: EventApproveDto) {
-        return await this.eventService.approve(req["user"]._id, data.user, data._id)
+        return await this.eventService.approveOrRecuse(req["user"]._id, data.user, data._id, true)
     }
+    @Post('/reject')
+
+    @ApiResponse({ status: 201, description: 'applicant reject in event' })
+    @ApiResponse({ status: 500, description: 'internal error in application' })
+    @ApiResponse({ status: 401, description: 'access token not found or invalid' })
+    @ApiResponse({ status: 400, description: 'error in body of request' })
+    @ApiResponse({ status: 404, description: 'event not found' })
+
+
+    async rejectInEvent(@Req() req: Request, @Body() data: EventApproveDto) {
+        return await this.eventService.approveOrRecuse(req["user"]._id, data.user, data._id, false)
+    }
+
     @Post('/send/invite')
 
     @ApiResponse({ status: 201, description: 'invitation sent to user' })

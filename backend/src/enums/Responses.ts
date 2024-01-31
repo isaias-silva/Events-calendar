@@ -37,5 +37,6 @@ export enum Responses {
     USER_ALREADY_IN_EVENT = "usuário já está no evento",
     INVITE_SEND_FOR_USER = "convite enviado para o usuário",
     EVENT_INVITE_ACCEPT = "convite aceito para o evento",
-    EVENT_INIVITE_REJECT = "convite rejeitado para o evento"
+    EVENT_INIVITE_REJECT = "convite rejeitado para o evento",
+    YOU_REJECT_USER_IN_EVENT = "usuário rejeitado para o evento."
 }

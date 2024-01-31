@@ -1,0 +1,24 @@
+<div class="box">
+    <h2 mat-dialog-title>{{data.type=='applicant'?'Solicitações de participação':'Participantes'}}</h2>
+    <div mat-dialog-content>
+        <div class="user-list-container">
+            <p *ngIf="data.users.length < 1 "> Não há usuários.</p>
+            <div class="container" *ngFor="let user of data.users">
+                <img [src]="user.profile || '../../../../assets/profile.jpg'" />
+                <div class="content">
+                    <h4>{{user.name}}</h4>
+                    <span>{{user.mail}}</span>
+                </div>
+                <div class="control-user" *ngIf="data.type=='applicant' ">
+                    <button mat-raised-button color="primary" (click)="accept(user._id)">aceitar</button>
+                    <button mat-raised-button color="warn" (click)="recuse(user._id)">recusar</button>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>

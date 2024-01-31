@@ -69,4 +69,12 @@ export class EventsService {
     return this.http.post<GlobalResponse>(`${this.apiUrl}/events/unsubscribe`, { _id }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
+  approveApplicant(_id: string, user: string) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/approve`, { _id, user }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+  recuseApplicant(_id: string, user: string) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/reject`, { _id, user }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
 }

@@ -88,14 +88,22 @@ li {
     align-items: center;
   }
 }
+.two-control {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  button{
+    margin:2px;
+  }
+}
 @media only screen and (max-width: 600px) {
   .event-card {
-   
     width: 100%;
     flex-direction: column;
   }
   .background {
-    flex:none;
+    flex: none;
     display: block;
     height: 100px;
   }
@@ -103,5 +111,11 @@ li {
     h1 {
       width: 100%;
     }
+  }
+  .two-control {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 }

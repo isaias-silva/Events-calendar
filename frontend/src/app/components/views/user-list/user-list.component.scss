@@ -1,0 +1,36 @@
+.box{
+    padding: 10px;
+}
+.container{
+    display: flex;
+    margin: 5px;
+    align-items: center;
+   
+    img{
+        width: 70px;
+        height: 70px;
+        border-radius: 100%;
+        border: 4px solid #0000005b;
+    }
+    .content{
+        margin-left: 10px;
+        margin-bottom: 20px;
+        h4{
+            margin:0;
+            font-weight: bold;
+        }
+        display: flex;
+        flex-direction: column;
+    }
+    .control-user{
+        display: flex;
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width:764px) {
+    .container{
+        display: block;
+       
+    }
+}

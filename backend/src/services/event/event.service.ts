@@ -178,7 +178,7 @@ export class EventService {
     }
     async sendNotify(_id: string) {
         try {
-            const eventDb = await this.eventModel.findOne({ _id ,isActive:true})
+            const eventDb = await this.eventModel.findOne({ _id, isActive: true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -188,9 +188,9 @@ export class EventService {
 
             participants.forEach(async participant => {
                 const user = await this.userService.get(participant)
-                
+
                 const body = this.mailService.generateMessage("event is today", user.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
-               
+
                 await this.mailService.sendMail(user.mail, "É hoje!!!", body)
             })
 
@@ -351,9 +351,9 @@ export class EventService {
             throw err
         }
     }
-    async approve(owner: string, user: string, _id: string) {
+    async approveOrRecuse(owner: string, user: string, _id: string, approve: boolean) {
         try {
-            const eventDb = await this.eventModel.findOne({ owner, _id })
+            const eventDb = await this.eventModel.findOne({ owner, _id, isActive: true })
             if (!eventDb) {
                 throw new NotFoundException(Responses.EVENT_NOT_FOUND)
             }
@@ -378,14 +378,20 @@ export class EventService {
 
             const indexOfUser = eventDb.applicants.indexOf(user)
             eventDb.applicants.splice(indexOfUser, 1)
-            eventDb.participants.push(user)
+            if (approve) {
+                eventDb.participants.push(user)
+
+            }
             await eventDb.save()
 
-            const body = this.mailService.generateMessage('invite approve', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
+            if(approve){
+                const body = this.mailService.generateMessage('invite approve', userDb.name, `${process.env.FRONT}/event/${eventDb._id}`, eventDb)
 
-            this.mailService.sendMail(userDb.mail, "inscrição aprovada", body)
-
-            return { message: Responses.YOU_APPROVE_THE_USER_IN_EVENT }
+                this.mailService.sendMail(userDb.mail, "inscrição aprovada", body)
+    
+            }
+            
+            return { message: approve?Responses.YOU_APPROVE_THE_USER_IN_EVENT:Responses.YOU_REJECT_USER_IN_EVENT }
 
         } catch (err) {
             Logger.error(err, 'Event Service')
@@ -393,6 +399,9 @@ export class EventService {
         }
 
     }
+
+
+
     async toInvite(owner: string, user: string, _id: string) {
         try {
 

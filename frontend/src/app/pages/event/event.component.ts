@@ -13,6 +13,8 @@ import { MatTableModule } from '@angular/material/table';
 import { UpdateEventComponent } from '../../components/views/update-event/update-event.component';
 import { EventCreate } from '../../../interfaces/event.create.interface';
 import swal from 'sweetalert2';
+import { UserListComponent } from '../../components/views/user-list/user-list.component';
+
 @Component({
   selector: 'app-event',
   standalone: true,
@@ -23,12 +25,6 @@ import swal from 'sweetalert2';
 
 })
 export class EventComponent implements OnInit {
-  getAction() {
-    if (this.isMe) return 'convidar';
-    else if (this.imApplicant || this.imParticipant) return 'se desinscrever'
-    else if (this.imGuest) return 'aceitar'
-    else return 'participar'
-  }
 
   constructor(private router: Router,
     public dialog: MatDialog,
@@ -73,7 +69,7 @@ export class EventComponent implements OnInit {
         console.log(event)
         this.setStringDates()
         this.setIsMe()
-        this.setGlobalDataForEvent()
+
 
       }, (error) => {
         console.log(error)
@@ -84,7 +80,7 @@ export class EventComponent implements OnInit {
         this.event = event
         this.setStringDates()
         this.setIsMe()
-        this.setGlobalDataForEvent()
+
       })
     }
   }
@@ -100,6 +96,8 @@ export class EventComponent implements OnInit {
     this.userService.getUser().subscribe((response) => {
 
       this.isMe = response._id == this.event?.owner
+
+      this.setGlobalDataForEvent()
 
     })
   }
@@ -117,6 +115,7 @@ export class EventComponent implements OnInit {
     if (this.event) {
       this.eventsService.getApplicants(this.event._id).subscribe((response) => {
         this.applicants = response
+        console.log(response)
       })
     }
   }
@@ -130,6 +129,7 @@ export class EventComponent implements OnInit {
 
   setGlobalDataForEvent() {
     if (this.event && this.isMe) {
+
       this.setParticipants()
       this.setApplicants()
       this.setGuests()
@@ -258,5 +258,20 @@ export class EventComponent implements OnInit {
       })
     }
 
+  }
+
+  openList(type: 'participant' | 'applicant') {
+    const dialog = this.dialog.open(UserListComponent, {
+      data: { _id: this.event?._id, type, users: type == 'participant' ? this.participants : this.applicants },
+      maxHeight: '100%',
+      minHeight:'200px',
+      width: '700px',
+    })
+
+    dialog.afterClosed().subscribe((update: boolean) => {
+      if (update == true) {
+        this.updateEvent()
+      }
+    })
   }
 }
