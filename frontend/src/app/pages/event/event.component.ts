@@ -10,10 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { UserData } from '../../../interfaces/user.data.interface';
 import { MatTableModule } from '@angular/material/table';
-import { CreateEventComponent } from '../../components/views/create-event/create-event.component';
-import { DialogGlobalComponent } from '../../components/views/dialog-global/dialog-global.componen';
 import { UpdateEventComponent } from '../../components/views/update-event/update-event.component';
 import { EventCreate } from '../../../interfaces/event.create.interface';
+import swal from 'sweetalert2';
 @Component({
   selector: 'app-event',
   standalone: true,
@@ -24,6 +23,13 @@ import { EventCreate } from '../../../interfaces/event.create.interface';
 
 })
 export class EventComponent implements OnInit {
+  getAction() {
+    if (this.isMe) return 'convidar';
+    else if (this.imApplicant || this.imParticipant) return 'se desinscrever'
+    else if (this.imGuest) return 'aceitar'
+    else return 'participar'
+  }
+
   constructor(private router: Router,
     public dialog: MatDialog,
     private eventsService: EventsService,
@@ -67,7 +73,7 @@ export class EventComponent implements OnInit {
         console.log(event)
         this.setStringDates()
         this.setIsMe()
-
+        this.setGlobalDataForEvent()
 
       }, (error) => {
         console.log(error)
@@ -78,7 +84,7 @@ export class EventComponent implements OnInit {
         this.event = event
         this.setStringDates()
         this.setIsMe()
-
+        this.setGlobalDataForEvent()
       })
     }
   }
@@ -92,15 +98,12 @@ export class EventComponent implements OnInit {
   }
   setIsMe() {
     this.userService.getUser().subscribe((response) => {
-      console.log(response)
+
       this.isMe = response._id == this.event?.owner
-      if (this.isMe) {
-        this.setApplicants()
-        this.setParticipants()
-        this.setGuests()
-      }
+
     })
   }
+
 
   setParticipants() {
     if (this.event) {
@@ -131,6 +134,26 @@ export class EventComponent implements OnInit {
       this.setApplicants()
       this.setGuests()
 
+    } else if (this.event) {
+      this.imParticipant
+      this.eventsService.getEventWhere('participate').subscribe((res) => {
+        const is = res.find(event => event._id == this.event?._id)
+
+        this.imParticipant = is ? true : false
+
+      })
+      this.eventsService.getEventWhere('applicate').subscribe((res) => {
+        const is = res.find(event => event._id == this.event?._id)
+        if (is) {
+          this.imApplicant = is ? true : false
+        }
+      })
+      this.eventsService.getEventWhere('guest').subscribe((res) => {
+        const is = res.find(event => event._id == this.event?._id)
+        if (is) {
+          this.imGuest = is ? true : false
+        }
+      })
     }
   }
 
@@ -186,6 +209,54 @@ export class EventComponent implements OnInit {
 
     }
 
+
   }
 
+
+  deleteEvent() {
+    if (this.event) {
+      swal.fire({
+        text: `tem certeza que deseja encerrar o evento "${this.event.title}" ? (os participantes serão informados)`
+        , icon: 'warning',
+        showConfirmButton: true,
+        showDenyButton: true,
+        confirmButtonText: 'Sim, encerrar!',
+        denyButtonText: 'Cancelar'
+      }).then(response => {
+        if (response.isConfirmed) {
+          if (this.event) {
+
+            this.eventsService.deleteEvent(this.event._id).subscribe(() => {
+              this.router.navigate(['/events/me'])
+            })
+          }
+        }
+
+      })
+    }
+  }
+  action() {
+
+    if (!this.event) {
+      return
+    }
+    if (this.isMe) {
+      return
+    }
+
+    if (this.imGuest) {
+      return
+    }
+
+    if (this.imParticipant || this.imApplicant) {
+      this.eventsService.unsubscribeEvent(this.event._id).subscribe(() => {
+        this.updateEvent()
+      })
+    } else {
+      this.eventsService.subscribeEvent(this.event._id).subscribe(() => {
+        this.updateEvent()
+      })
+    }
+
+  }
 }

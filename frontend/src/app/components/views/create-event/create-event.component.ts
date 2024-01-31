@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { EventCreate } from '../../../../interfaces/event.create.interface';
 
+
 @Component({
   standalone: true,
   selector: 'app-create-event-dialog',
@@ -18,7 +19,7 @@ import { EventCreate } from '../../../../interfaces/event.create.interface';
 })
 export class CreateEventComponent {
   eventForm: FormGroup;
-  
+
 
   constructor(
     private dialogRef: MatDialogRef<CreateEventComponent>,
@@ -41,21 +42,28 @@ export class CreateEventComponent {
   onSave(): void {
 
     if (this.eventForm.valid) {
-      const { title, description,isPrivate } = this.eventForm.value
+      const { title, description, isPrivate } = this.eventForm.value
 
       const initDateObject: Date = this.makeDate(this.eventForm.get("initDate")?.value, this.eventForm.get("initTime")?.value)
       const endDateObject: Date = this.makeDate(this.eventForm.get("endDate")?.value, this.eventForm.get("endTime")?.value)
 
       if (!this.validTime(initDateObject, endDateObject)) {
 
+      
+
         return
       }
+      if (description.length < 20) {
 
-      const formatEvent:EventCreate = {
+
+
+        return
+      }
+      const formatEvent: EventCreate = {
         title,
         describ: description,
-        initString:initDateObject.toISOString(),
-        endString:endDateObject.toISOString(),
+        initString: initDateObject.toISOString(),
+        endString: endDateObject.toISOString(),
         isPrivate
       }
 

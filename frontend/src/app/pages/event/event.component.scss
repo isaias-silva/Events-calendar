@@ -1,4 +1,7 @@
 @import "../../../styles.scss";
+.container-event {
+  height: 100vh;
+}
 .event-card {
   display: flex;
   width: 60%;
@@ -6,23 +9,22 @@
   overflow: hidden;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.316);
-  color:$font-color;
-  position:relative
+  color: $font-color;
+  position: relative;
 }
-.control{
-  
+.control {
   font-size: 16px;
   position: absolute;
-  bottom:1;
+  bottom: 1;
   right: 0;
   margin: 2px;
   padding: 2px;
-  button{
+  button {
     margin: 2px;
   }
 }
 .background {
-  flex: 0 0 30%; 
+  flex: 0 0 30%;
   padding: 20px;
   display: flex;
   align-items: center;
@@ -32,15 +34,14 @@
   background-color: #007bff;
   opacity: 0.8;
   background-size: cover;
-  
 }
 
 .event-details {
   flex: 1;
   background: #fff;
   padding: 20px;
-  h1{
-    width: 85%;
+  h1 {
+    width: 50%;
   }
 }
 
@@ -48,7 +49,8 @@
   margin-bottom: 20px;
 }
 
-.description, .info {
+.description,
+.info {
   margin-bottom: 20px;
 }
 
@@ -65,36 +67,41 @@ li {
 .material-icons {
   font-size: 48px;
 }
-.maskIsme{
+.maskIsme {
   width: 100%;
   height: 100%;
   position: absolute;
-  
+
   transition: all 0.5s ease;
-  &:hover{
+  &:hover {
     background-color: #0000006b;
-    cursor: pointer; 
+    cursor: pointer;
   }
-  input{
+  input {
     display: none;
   }
-  label{
+  label {
     display: flex;
     width: 100%;
     height: 100%;
-   justify-content: center;
-   align-items: center;
+    justify-content: center;
+    align-items: center;
   }
 }
 @media only screen and (max-width: 600px) {
   .event-card {
-    width: 100%; 
+   
+    width: 100%;
     flex-direction: column;
   }
-.event-details{
-  h1{
-    width: 100%;
+  .background {
+    flex:none;
+    display: block;
+    height: 100px;
   }
-}
-
+  .event-details {
+    h1 {
+      width: 100%;
+    }
+  }
 }

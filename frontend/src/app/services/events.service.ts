@@ -40,6 +40,11 @@ export class EventsService {
     return this.http.get<UserData[]>(`${this.apiUrl}/events/guests/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
+  getEventWhere(type: 'participate' | 'applicate' | 'guest') {
+    return this.http.get<Event[]>(`${this.apiUrl}/events/where/${type}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+
   eventUpdate(id: string, event: EventCreate) {
     return this.http.put<GlobalResponse>(`${this.apiUrl}/events/update/${id}`, event, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
@@ -50,6 +55,18 @@ export class EventsService {
     formData.append("file", file);
 
     return this.http.put<GlobalResponse>(`${this.apiUrl}/events/update/background/${id}`, formData, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+  deleteEvent(id: string) {
+    return this.http.delete<GlobalResponse>(`${this.apiUrl}/events/cancel/${id}`, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+  subscribeEvent(_id: string) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/subscribe`, { _id }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
+
+  }
+  unsubscribeEvent(_id: string) {
+    return this.http.post<GlobalResponse>(`${this.apiUrl}/events/unsubscribe`, { _id }, { headers: { "authorization": `Bearer ${this.userService.getToken()}` } })
 
   }
 }

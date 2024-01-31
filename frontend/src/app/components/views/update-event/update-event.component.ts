@@ -6,10 +6,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Event } from '../../../../interfaces/event.interface';
-import { CreateEventComponent } from '../create-event/create-event.component';
-import { EventCreate } from '../../../../interfaces/event.create.interface';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { DialogGlobalComponent } from '../dialog-global/dialog-global.componen';
+
+
 
 @Component({
   selector: 'app-update-event',
@@ -53,7 +51,6 @@ export class UpdateEventComponent {
       const endDateObject: Date = this.makeDate(this.eventForm.get("endDate")?.value, this.eventForm.get("endTime")?.value)
 
       if (!this.validTime(initDateObject, endDateObject)) {
-      
 
         return
       }

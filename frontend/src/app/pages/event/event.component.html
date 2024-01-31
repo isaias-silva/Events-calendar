@@ -1,45 +1,51 @@
-<div class="event-card">
-  <div class="control" *ngIf="isMe==true">
-    <button mat-button (click)="openEditorModal()">
-      Editar
-    </button>
-    <button mat-button  color="warn" >
-      Encerrar evento
-    </button>
+<div class="container-event">
 
-  </div>
+  <div class="event-card">
+    <div class="control" *ngIf="isMe==true">
+      <button mat-button (click)="openEditorModal()">
+        Editar
+      </button>
+      <button mat-button color="warn" (click)="deleteEvent()">
+        Encerrar evento
+      </button>
 
-  <div class="background"
-    [style.backgroundImage]="'url('+(backgroundUpload?backgroundUpload : event?.background ) +')'">
-    <div class="maskIsme" *ngIf="isMe">
-
-      <input type="file" id="background" (change)="changeImage($event)">
-      <label for="background"></label>
     </div>
 
-    <i class="material-icons" *ngIf="!event?.background">event</i>
-  </div>
+    <div class="background"
+      [style.backgroundImage]="'url('+(backgroundUpload?backgroundUpload : event?.background ) +')'">
+      <div class="maskIsme" *ngIf="isMe">
 
-  <div class="event-details">
-    <div class="header">
-      <h1>{{ event?.title }}</h1>
-      <p>{{ dateStringInit }} - {{ dateStringEnd}}</p>
+        <input type="file" id="background" (change)="changeImage($event)">
+        <label for="background"></label>
+      </div>
+
+      <i class="material-icons" *ngIf="!event?.background">event</i>
     </div>
 
-    <div class="content">
-      <div class="description">
-        <h2>Descrição</h2>
-        <p>{{ event?.describ }}</p>
+    <div class="event-details">
+      <div class="header">
+        <h1>{{ event?.title }}</h1>
+        <p>{{ dateStringInit }} - {{ dateStringEnd}}</p>
       </div>
 
-      <div class="info">
-        <h2>Detalhes do Evento</h2>
-        <ul>
-          <li><strong>Privado:</strong> {{ event?.isPrivate ? 'Sim' : 'Não' }}</li>
+      <div class="content">
+        <div class="description">
+          <h2>Descrição</h2>
+          <p>{{ event?.describ }}</p>
+        </div>
 
-        </ul>
+        <div class="info">
+          <h2>Detalhes do Evento</h2>
+          <ul>
+            <li><strong>Privado:</strong> {{ event?.isPrivate ? 'Sim' : 'Não' }}</li>
+
+          </ul>
+        </div>
+        <button (click)="action()" mat-button *ngIf="(isMe && event?.isPrivate)||(!isMe)">{{ isMe ? 'convidar' :
+          imApplicant || imParticipant ? 'se desinscrever' :
+          imGuest ? 'aceitar' :
+          'participar'}}</button>
       </div>
-      <button mat-button *ngIf="(isMe && event?.isPrivate)||(!isMe)">{{isMe?'convidar':'participar'}}</button>
     </div>
   </div>
 </div>
